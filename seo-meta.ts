@@ -52,10 +52,11 @@ export function buildHeadTags(config: SiteConfig, page: PageMeta): string {
     `<meta name="twitter:description" content="${escapeHtml(description)}">`,
   ];
 
-  if (page.ogImage) {
+  const ogImage = page.ogImage ?? config.brand.defaultOgImage;
+  if (ogImage) {
     tags.push(
-      `<meta property="og:image" content="${page.ogImage}">`,
-      `<meta name="twitter:image" content="${page.ogImage}">`
+      `<meta property="og:image" content="${ogImage}">`,
+      `<meta name="twitter:image" content="${ogImage}">`
     );
   }
 
@@ -133,7 +134,9 @@ export function buildArticleSchema(config: SiteConfig, post: ArticlePost): strin
       "@type": "Organization",
       name: config.brand.logoName,
     },
-    ...(post.ogImage ? { image: post.ogImage } : {}),
+    ...((post.ogImage ?? config.brand.defaultOgImage)
+      ? { image: post.ogImage ?? config.brand.defaultOgImage }
+      : {}),
     ...(post.category ? { articleSection: post.category } : {}),
   };
   return jsonLdScript(schema);

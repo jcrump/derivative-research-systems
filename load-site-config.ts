@@ -29,6 +29,8 @@ export interface SiteConfig {
     founded: string;
     location: string;
     accentColor: string;
+    /** Fallback Open Graph / Twitter Card image for pages/posts with no image of their own. */
+    defaultOgImage?: string;
   };
   contact: {
     advisoryEmail: string;
