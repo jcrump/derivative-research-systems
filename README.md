@@ -1,138 +1,42 @@
-# Derivative Research Systems — Site Package
+# SEO Templates for DRS Site
 
-## File Structure
+Three standalone pieces — wire them into your build whenever you're ready:
 
-```
-drs-site/
-├── index.html                  ← Homepage
-├── package.json                ← npm scripts
-├── netlify.toml                ← Netlify config
-├── wrangler.toml               ← Cloudflare Pages config
-├── .gitignore
-├── admin/
-│   └── index.html              ← Blog Admin CMS (local use only, excluded from dist/)
-├── blog/
-│   ├── index.html              ← Blog listing page
-│   ├── blog-registry.js        ← Post index (exported from Admin or built by script)
-│   ├── _post-template.html     ← Template reference
-│   └── [slug].html             ← Individual post files (exported from Admin)
-└── scripts/
-    ├── build.js                ← Copies site to dist/ for deployment
-    └── build-registry.js       ← Regenerates blog-registry.js from /blog/posts/*.json
-```
+## 1. `robots.txt`
+Drop straight into your site's public root (same level as `index.html`).
+Blocks `/admin/*`, points crawlers at the sitemap.
 
----
+## 2. `generate-sitemap.ts`
+Node/TypeScript script that reads your `blog-registry` and a small static
+route list, and writes `sitemap.xml` to your build output dir.
 
-## Quick Start
+- Adjust the `import blogRegistry from "./blog-registry"` line to match
+  the real path/shape of your registry file.
+- Adjust `OUTPUT_PATH` to match wherever Netlify serves static files from.
+- Run it as a `prebuild` step in `package.json`:
+  ```json
+  "scripts": {
+    "prebuild": "ts-node scripts/generate-sitemap.ts",
+    "build": "your-existing-build-command"
+  }
+  ```
+  or compile with `tsc` first if you're not using `ts-node` in the pipeline.
 
-```bash
-# Install dev tooling
-npm install
+## 3. `seo-meta.ts`
+Helper functions for:
+- `buildHeadTags()` — title, meta description, canonical, Open Graph, Twitter Card
+- `buildOrganizationSchema()` — site-wide JSON-LD, include once (root layout)
+- `buildLocalBusinessSchema()` — optional, for Milwaukee/regional search visibility
+- `buildArticleSchema()` — per-post JSON-LD for blog content
 
-# Start local dev server at http://localhost:3000
-npm run dev
-```
+Fill in a single `SiteConfig` object from your `site.config.js` values, then
+call `buildHeadTags(site, pageMeta)` per page/post and inject the returned
+string into the `<head>`.
 
----
+## Not included here (do once, outside code)
+- Verify the site in Google Search Console + Bing Webmaster Tools
+- Add GA4 or Plausible
+- Set up a Google Business Profile if you want local map-pack visibility
 
-## Blog Workflow
-
-### 1. Write a post
-Open `admin/index.html` directly in your browser (no server needed):
-```
-open admin/index.html       # macOS
-start admin/index.html      # Windows
-xdg-open admin/index.html   # Linux
-```
-
-- Click **+ New**, fill in title / category / excerpt / tags / date
-- Write in Markdown in the editor
-- Click **Show Preview** for live rendering
-- Click **Save Post** (persists to browser localStorage)
-
-### 2. Export and publish
-In the Admin, click **Export Files → Download All Files**. You get:
-- `blog-registry.js` — drop into `blog/`
-- `[slug].html` per post — drop into `blog/`
-
-Then build and deploy:
-```bash
-npm run build            # copies site to dist/, skipping admin/
-npm run deploy:netlify   # build + push to Netlify production
-```
-
-### Alternative: JSON-based posts (version-controlled)
-If you prefer keeping posts as source files in git:
-```bash
-# Create blog/posts/my-post.json with fields: slug, title, excerpt, category, date, readTime, tags
-# Then regenerate the registry:
-npm run build:registry
-```
-
----
-
-## npm Commands
-
-| Command | What it does |
-|---|---|
-| `npm install` | Install dev dependencies (serve, netlify-cli, wrangler, gh-pages) |
-| `npm run dev` | Local dev server at **http://localhost:3000** |
-| `npm run build` | Copy site to `dist/` (excludes `admin/`, `scripts/`, `node_modules/`) |
-| `npm run build:registry` | Rebuild `blog-registry.js` from `blog/posts/*.json` files |
-| `npm run preview` | Build then serve `dist/` at http://localhost:3001 |
-| `npm run clean` | Delete `dist/` |
-| `npm run deploy:netlify` | Build + deploy to **Netlify production** |
-| `npm run deploy:netlify:preview` | Build + deploy to Netlify **draft URL** (no production swap) |
-| `npm run deploy:cloudflare` | Build + deploy to **Cloudflare Pages production** |
-| `npm run deploy:cloudflare:preview` | Build + deploy to Cloudflare Pages **preview branch** |
-| `npm run deploy:gh-pages` | Build + deploy to **GitHub Pages** (`gh-pages` branch) |
-
----
-
-## First-Time Deployment Setup
-
-### Netlify
-```bash
-npm install
-npx netlify-cli login          # authenticate with your Netlify account
-npx netlify-cli init           # link or create a Netlify site (run once)
-npm run deploy:netlify         # deploy to production
-```
-
-Your site URL will be printed after deploy. To set a custom domain, go to
-Netlify → Site Settings → Domain Management.
-
-### Cloudflare Pages
-```bash
-npm install
-npx wrangler login             # authenticate with your Cloudflare account
-npm run deploy:cloudflare      # deploy to production
-```
-
-On first deploy, Cloudflare will create the project. Set your custom domain
-in Cloudflare Dashboard → Pages → your project → Custom Domains.
-
-### GitHub Pages
-```bash
-npm install
-npm run deploy:gh-pages        # pushes dist/ to the gh-pages branch
-```
-
-Then in your GitHub repo → Settings → Pages → set source to `gh-pages` branch.
-
----
-
-## Environment Notes
-
-- **Node.js 18+** required
-- **No framework, no bundler** — pure static HTML, deploys anywhere
-- **admin/** is excluded from `dist/` — it's a local CMS tool, not public-facing
-- `blog-registry.js` must be present and up to date before running `npm run build`
-
----
-
-## Contact
-
-advisory@derivativeresearchsystems.com  
-ceo@derivativeresearchsystems.com  
-linkedin.com/in/jeffmcrump/
+Happy to wire any of this directly into your actual repo structure if you
+paste in `site.config.js` / `blog-registry.js` or the relevant files.
