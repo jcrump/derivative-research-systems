@@ -1,95 +1,85 @@
 /**
  * generate-sitemap.ts
  *
- * Generates sitemap.xml from your blog-registry.js + a list of static routes.
- * Run as a Netlify build step (or pre-build script) so the sitemap stays in
- * sync with every new post automatically.
+ * Generates sitemap.xml from site.config.js + a static route list, and
+ * (once wired) blog-registry.js for per-post URLs.
  *
  * Usage:
- *   npx ts-node generate-sitemap.ts
- *   (or compile with tsc and run with node)
+ *   npx ts-node scripts/generate-sitemap.ts
+ * as a `prebuild` step:
+ *   "scripts": { "prebuild": "ts-node scripts/generate-sitemap.ts" }
  *
- * Expects blog-registry to export an array like:
- *   [{ slug: "modernizing-legacy-java", date: "2026-05-01", updated: "2026-05-10" }, ...]
- * Adjust the import path / shape to match your actual registry.
+ * STATUS: fully wired. Domain comes from site.config.js, post URLs come
+ * from blog-registry.js (both loaded via the VM-sandbox loaders since
+ * neither file uses module.exports).
  */
 
 import fs from "fs";
 import path from "path";
-
-// --- Adjust this import to match your actual blog-registry.js export ---
-// If blog-registry.js is CommonJS, you can require() it instead:
-// const blogRegistry = require("./blog-registry.js");
-import blogRegistry from "./blog-registry"; // e.g. export default [...]
-
-interface BlogPost {
-  slug: string;
-  date?: string;      // publish date, ISO format YYYY-MM-DD
-  updated?: string;    // last modified date, ISO format
-}
+import { loadSiteConfig } from "./load-site-config";
+import { loadBlogRegistry, toIsoDate } from "./load-blog-registry";
 
 interface StaticRoute {
-  path: string;        // e.g. "/", "/about", "/services"
+  path: string;
   changefreq: "daily" | "weekly" | "monthly" | "yearly";
-  priority: number;     // 0.0 - 1.0
+  priority: number;
 }
 
-const SITE_URL = "https://derivativeresearchsystems.com";
-const OUTPUT_PATH = path.join(__dirname, "..", "dist", "sitemap.xml"); // adjust to your build output dir
-
-// Static (non-blog) routes worth listing explicitly
+// TODO: confirm against your actual router/nav — inferred from
+// site.config.js sections (hero, services, blogCategories, contact).
 const staticRoutes: StaticRoute[] = [
   { path: "/", changefreq: "weekly", priority: 1.0 },
-  { path: "/about", changefreq: "monthly", priority: 0.8 },
   { path: "/services", changefreq: "monthly", priority: 0.9 },
+  { path: "/about", changefreq: "monthly", priority: 0.8 },
   { path: "/blog", changefreq: "daily", priority: 0.8 },
   { path: "/contact", changefreq: "monthly", priority: 0.7 },
 ];
 
-function isoDate(d?: string): string {
-  return d ? new Date(d).toISOString().split("T")[0] : new Date().toISOString().split("T")[0];
-}
+// Adjust to wherever Netlify serves static files from (e.g. "dist", "public", "out").
+const OUTPUT_PATH = path.join(__dirname, "..", "dist", "sitemap.xml");
 
-function buildUrlEntry(loc: string, lastmod: string, changefreq: string, priority: number): string {
-  return `  <url>
-    <loc>${loc}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>${changefreq}</changefreq>
-    <priority>${priority.toFixed(1)}</priority>
-  </url>`;
-}
-
-function generateSitemap(posts: BlogPost[]): string {
-  const staticEntries = staticRoutes.map((r) =>
-    buildUrlEntry(`${SITE_URL}${r.path}`, isoDate(), r.changefreq, r.priority)
-  );
-
-  const postEntries = posts.map((post) =>
-    buildUrlEntry(
-      `${SITE_URL}/blog/${post.slug}`,
-      isoDate(post.updated ?? post.date),
-      "monthly",
-      0.6
-    )
-  );
-
-  const body = [...staticEntries, ...postEntries].join("\n");
-
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${body}
-</urlset>
-`;
+function urlEntry(loc: string, changefreq: string, priority: number, lastmod?: string): string {
+  return [
+    "  <url>",
+    `    <loc>${loc}</loc>`,
+    lastmod ? `    <lastmod>${lastmod}</lastmod>` : "",
+    `    <changefreq>${changefreq}</changefreq>`,
+    `    <priority>${priority.toFixed(1)}</priority>`,
+    "  </url>",
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 function main() {
-  const posts: BlogPost[] = (blogRegistry as unknown as BlogPost[]) ?? [];
-  const xml = generateSitemap(posts);
+  const config = loadSiteConfig();
+  const domain = config.brand.domain.replace(/\/+$/, "");
+  const baseUrl = `https://${domain}`;
+
+  const entries: string[] = staticRoutes.map((r) =>
+    urlEntry(`${baseUrl}${r.path}`, r.changefreq, r.priority)
+  );
+
+  // Blog posts — registry has no separate "updated" field, so <lastmod>
+  // falls back to the post's publish date. Posts whose date string fails
+  // to parse are still included, just without a <lastmod>.
+  const posts = loadBlogRegistry();
+  for (const post of posts) {
+    entries.push(
+      urlEntry(`${baseUrl}/blog/${post.slug}`, "monthly", 0.6, toIsoDate(post.date))
+    );
+  }
+
+  const xml = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ...entries,
+    "</urlset>",
+  ].join("\n");
 
   fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
   fs.writeFileSync(OUTPUT_PATH, xml, "utf-8");
-
-  console.log(`Sitemap written to ${OUTPUT_PATH} (${posts.length} posts + ${staticRoutes.length} static routes)`);
+  console.log(`Sitemap written to ${OUTPUT_PATH} (${entries.length} URLs, domain: ${domain})`);
 }
 
 main();

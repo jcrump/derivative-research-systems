@@ -3,7 +3,7 @@
 var DRS_BLOG_POSTS = [
   {
     slug: "you-dont-need-a-data-scientist-to-start-using-ai",
-    title: "You Dont  Need a Data Scientist To Start Using AI",
+    title: "You Dont Need a Data Scientist To Start Using AI",
     excerpt: "You Don't Need a Data Scientist to Start Using AI. But You Do Need an Honest Conversation With Yourself First.",
     category: "Architecture",
     date: "June 29, 2026",
