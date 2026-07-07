@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg"/>
+  <title>Insights | Derivative Research Systems</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green:#76b900;--green-dk:#5a8c00;--green-lt:#9fd600;
+      --black:#000;--surface:#0a0a0a;--panel:#111;--border:#222;
+      --mid:#444;--text:#e8e8e8;--muted:#888;--white:#fff;
+      --nav-h:60px;--font:'Inter',system-ui,sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--black);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    button{cursor:pointer;font-family:inherit;}
+
+    /* NAV */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);background:rgba(0,0,0,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;}
+    .nav-inner{width:100%;max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:0;}
+    .nav-logo{display:flex;align-items:center;gap:10px;margin-right:40px;}
+    .nav-logo-mark{width:28px;height:28px;background:var(--green);clip-path:polygon(0 0,100% 0,100% 60%,60% 100%,0 100%);}
+    .nav-logo-text{font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--white);}
+    .nav-logo-text span{color:var(--green);}
+    .nav-links{display:flex;align-items:center;height:var(--nav-h);list-style:none;gap:0;flex:1;}
+    .nav-links li a{display:flex;align-items:center;padding:0 16px;height:var(--nav-h);font-size:13px;font-weight:500;color:var(--text);transition:color .15s;}
+    .nav-links li a:hover,.nav-links li a.active{color:var(--green);}
+    .nav-actions{margin-left:auto;display:flex;gap:12px;}
+    .btn-nav{padding:7px 18px;font-size:12px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border:1px solid var(--green);color:var(--green);background:transparent;transition:background .15s,color .15s;}
+    .btn-nav:hover,.btn-nav-fill{background:var(--green);color:var(--black);}
+
+    /* HERO */
+    .blog-hero{padding:calc(var(--nav-h) + 80px) 24px 60px;background:var(--surface);border-bottom:1px solid var(--border);}
+    .blog-hero-inner{max-width:1400px;margin:0 auto;}
+    .eyebrow{font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+    .eyebrow::before{content:'';display:block;width:20px;height:1px;background:var(--green);}
+    .blog-hero h1{font-size:clamp(40px,6vw,72px);font-weight:900;letter-spacing:-0.03em;color:var(--white);line-height:1;margin-bottom:16px;}
+    .blog-hero h1 span{color:var(--green);}
+    .blog-hero p{font-size:17px;color:var(--muted);max-width:520px;}
+
+    /* FILTERS */
+    .filters{max-width:1400px;margin:0 auto;padding:32px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border);}
+    .filter-btn{padding:7px 18px;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:1px solid var(--border);color:var(--muted);background:transparent;transition:all .15s;}
+    .filter-btn:hover,.filter-btn.active{border-color:var(--green);color:var(--green);}
+    .filter-search{margin-left:auto;display:flex;gap:0;}
+    .filter-search input{background:var(--panel);border:1px solid var(--border);color:var(--text);padding:8px 16px;font-size:13px;font-family:var(--font);outline:none;width:220px;transition:border-color .15s;}
+    .filter-search input:focus{border-color:var(--green);}
+
+    /* GRID */
+    .posts-section{max-width:1400px;margin:0 auto;padding:48px 24px 100px;}
+    .posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+    .post-card{background:var(--panel);border:1px solid var(--border);display:flex;flex-direction:column;transition:border-color .2s;}
+    .post-card:hover{border-color:var(--green);}
+    .post-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#0a1200,#0d1f00);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+    .post-thumb-text{font-size:12px;font-weight:700;color:rgba(118,185,0,0.2);letter-spacing:0.1em;text-transform:uppercase;}
+    .post-cat{position:absolute;top:14px;left:14px;background:var(--green);color:var(--black);font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;}
+    .post-body{padding:24px;flex:1;display:flex;flex-direction:column;}
+    .post-meta{font-size:11px;color:var(--green);font-weight:600;letter-spacing:0.08em;margin-bottom:8px;}
+    .post-title{font-size:17px;font-weight:700;color:var(--white);line-height:1.3;margin-bottom:10px;}
+    .post-excerpt{font-size:13px;color:var(--muted);line-height:1.7;flex:1;}
+    .post-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .post-read{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
+    .post-arrow{color:var(--green);font-size:16px;}
+    .no-posts{grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--muted);}
+    .no-posts h3{font-size:20px;color:var(--text);margin-bottom:12px;}
+
+    /* PAGINATION */
+    .pagination{display:flex;justify-content:center;gap:8px;margin-top:48px;}
+    .page-btn{padding:8px 16px;border:1px solid var(--border);color:var(--muted);background:transparent;font-size:13px;font-family:var(--font);transition:all .15s;}
+    .page-btn:hover,.page-btn.active{border-color:var(--green);color:var(--green);}
+
+    /* FOOTER */
+    footer{background:#050505;border-top:1px solid var(--border);padding:32px 24px;text-align:center;}
+    footer p{font-size:12px;color:var(--mid);}
+    footer a{color:var(--green);}
+
+    @media(max-width:900px){.posts-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:600px){.posts-grid{grid-template-columns:1fr;}.nav-links{display:none;}}
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../index.html">
+      <div class="nav-logo-mark"></div>
+      <div class="nav-logo-text"><span>DRS</span> Derivative Research Systems</div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html#services">Services</a></li>
+      <li><a href="../index.html#industries">Industries</a></li>
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#case-studies">Case Studies</a></li>
+      <li><a href="index.html" class="active">Insights</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="../admin/index.html" class="btn-nav">Blog Admin</a>
+      <a href="../index.html#contact" class="btn-nav btn-nav-fill">Engage DRS</a>
+    </div>
+  </div>
+</nav>
+
+<div class="blog-hero">
+  <div class="blog-hero-inner">
+    <div class="eyebrow">DRS Insights</div>
+    <h1>Architecture thinking<br/><span>from the field.</span></h1>
+    <p>Practical perspectives on IT modernization, distributed systems, and security integration.</p>
+  </div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="Architecture">Architecture</button>
+  <button class="filter-btn" data-cat="Security">Security</button>
+  <button class="filter-btn" data-cat="Modernization">Modernization</button>
+  <button class="filter-btn" data-cat="Cloud">Cloud</button>
+  <button class="filter-btn" data-cat="Engineering">Engineering</button>
+  <div class="filter-search">
+    <input type="text" id="searchInput" placeholder="Search posts…"/>
+  </div>
+</div>
+
+<div class="posts-section">
+  <div class="posts-grid" id="postsGrid">
+    <div class="no-posts">
+      <h3>No posts yet.</h3>
+      <p>Use the <a href="../admin/index.html">Blog Admin</a> to write and publish your first post.</p>
+    </div>
+  </div>
+  <div class="pagination" id="pagination"></div>
+</div>
+
+<footer>
+  <p>© 2024–2026 Derivative Research Systems LLC &nbsp;·&nbsp; <a href="../index.html">Home</a> &nbsp;·&nbsp; <a href="../index.html#contact">Contact</a></p>
+</footer>
+
+<script>
+// Attempt to load registry; track whether the file loaded at all
+window._registryLoaded = false;
+window._registryError  = false;
+</script>
+<script src="blog-registry.js"
+  onload="window._registryLoaded=true;"
+  onerror="window._registryError=true;"></script>
+<script>
+const POSTS_PER_PAGE = 9;
+let allPosts = (typeof DRS_BLOG_POSTS !== 'undefined') ? [...DRS_BLOG_POSTS] : [];
+let filtered = [...allPosts];
+let currentPage = 1;
+let currentCat = 'all';
+let searchTerm = '';
+
+// Detect stale/empty registry vs genuine no-posts
+const registryMissing = window._registryError || typeof DRS_BLOG_POSTS === 'undefined';
+const registryEmpty   = !registryMissing && DRS_BLOG_POSTS.length === 0;
+
+function noPostsHTML(isFilter) {
+  if (isFilter) {
+    return `<div class="no-posts"><h3>No posts match.</h3><p>Try clearing the filter or search term.</p></div>`;
+  }
+  if (registryMissing) {
+    return `<div class="no-posts">
+      <h3>Registry not found</h3>
+      <p style="margin-bottom:16px;"><code>blog/blog-registry.js</code> is missing or empty.</p>
+      <p><strong>To fix:</strong> open the <a href="../admin/index.html">Blog Admin</a>, click <strong>Export Files</strong>, download <code>blog-registry.js</code>, and place it in the <code>blog/</code> folder.</p>
+    </div>`;
+  }
+  if (registryEmpty) {
+    return `<div class="no-posts">
+      <h3>No posts published yet.</h3>
+      <p>Write your first post in the <a href="../admin/index.html">Blog Admin</a>, then click <strong>Export Files</strong> and drop <code>blog-registry.js</code> into the <code>blog/</code> folder.</p>
+    </div>`;
+  }
+  return `<div class="no-posts"><h3>No posts found.</h3><p>Try a different filter or <a href="../admin/index.html">write one</a>.</p></div>`;
+}
+
+function cardHTML(p) {
+  return `
+    <div class="post-card" data-cat="${p.category||''}">
+      <div class="post-thumb">
+        <div class="post-thumb-text">${p.category||'Insight'}</div>
+        <span class="post-cat">${p.category||'Advisory'}</span>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">${p.date}</div>
+        <div class="post-title">${p.title}</div>
+        <p class="post-excerpt">${p.excerpt}</p>
+      </div>
+      <div class="post-footer">
+        <span class="post-read">${p.readTime||'5 min read'}</span>
+        <a href="${p.slug}.html" class="post-arrow">→</a>
+      </div>
+    </div>`;
+}
+
+function render() {
+  const grid = document.getElementById('postsGrid');
+  const pager = document.getElementById('pagination');
+  const isFiltering = currentCat !== 'all' || searchTerm.length > 0;
+  let posts = allPosts.filter(p => {
+    const matchCat = currentCat === 'all' || (p.category||'') === currentCat;
+    const matchSearch = !searchTerm || p.title.toLowerCase().includes(searchTerm) || (p.excerpt||'').toLowerCase().includes(searchTerm);
+    return matchCat && matchSearch;
+  });
+  filtered = posts;
+  const total = Math.ceil(posts.length / POSTS_PER_PAGE);
+  if (currentPage > total) currentPage = 1;
+  const slice = posts.slice((currentPage-1)*POSTS_PER_PAGE, currentPage*POSTS_PER_PAGE);
+  if (posts.length === 0) {
+    grid.innerHTML = noPostsHTML(isFiltering);
+    pager.innerHTML = '';
+    return;
+  }
+  grid.innerHTML = slice.map(cardHTML).join('');
+  if (total <= 1) { pager.innerHTML = ''; return; }
+  let pages = '';
+  for (let i = 1; i <= total; i++) {
+    pages += `<button class="page-btn${i===currentPage?' active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+  pager.innerHTML = pages;
+}
+
+function goPage(n) { currentPage = n; render(); window.scrollTo(0,0); }
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCat = btn.dataset.cat;
+    currentPage = 1;
+    render();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchTerm = e.target.value.toLowerCase();
+  currentPage = 1;
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

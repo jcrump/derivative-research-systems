@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Hidden Cost of Technical Debt for Mid-Market Companies | DRS Insights</title>
+  <meta name="description" content="Technical Debt Hidden Costs"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--green:#76b900;--green-dk:#5a8c00;--black:#000;--surface:#0a0a0a;--panel:#111;--border:#222;--mid:#444;--text:#e8e8e8;--muted:#888;--white:#fff;--nav-h:60px;--font:'Inter',system-ui,sans-serif;--serif:'Merriweather',Georgia,serif;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--black);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);background:rgba(0,0,0,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;}
+    .nav-inner{width:100%;max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;}
+    .nav-logo{display:flex;align-items:center;gap:10px;margin-right:auto;}
+    .nav-logo-mark{width:28px;height:28px;background:var(--green);clip-path:polygon(0 0,100% 0,100% 60%,60% 100%,0 100%);}
+    .nav-logo-text{font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--white);}
+    .nav-logo-text span{color:var(--green);}
+    .nav-back{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;display:flex;align-items:center;gap:6px;transition:color .15s;}
+    .nav-back:hover{color:var(--green);}
+    .post-header{padding:calc(var(--nav-h) + 80px) 24px 60px;background:var(--surface);border-bottom:1px solid var(--border);}
+    .post-header-inner{max-width:860px;margin:0 auto;}
+    .post-breadcrumb{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:24px;}
+    .post-breadcrumb a:hover{color:var(--green);}
+    .post-breadcrumb span{color:var(--mid);}
+    .post-cat-badge{display:inline-block;background:var(--green);color:var(--black);font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;margin-bottom:20px;}
+    .post-title{font-size:clamp(28px,5vw,52px);font-weight:900;letter-spacing:-0.02em;color:var(--white);line-height:1.08;margin-bottom:20px;}
+    .post-excerpt-lede{font-size:18px;color:var(--muted);line-height:1.6;margin-bottom:32px;font-weight:300;}
+    .post-meta-bar{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding-top:24px;border-top:1px solid var(--border);}
+    .post-author{display:flex;align-items:center;gap:12px;}
+    .post-author-avatar{width:36px;height:36px;background:var(--green);clip-path:polygon(0 0,100% 0,100% 60%,60% 100%,0 100%);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:var(--black);}
+    .post-author-name{font-size:13px;font-weight:600;color:var(--text);}
+    .post-author-role{font-size:11px;color:var(--muted);}
+    .post-meta-item{font-size:12px;color:var(--muted);}
+    .post-meta-item strong{color:var(--text);}
+    .post-layout{max-width:1100px;margin:0 auto;padding:64px 24px;display:grid;grid-template-columns:1fr 260px;gap:64px;align-items:start;}
+    .post-content{font-family:var(--serif);font-size:17px;line-height:1.85;color:#ccc;}
+    .post-content h2{font-family:var(--font);font-size:26px;font-weight:800;color:var(--white);margin:48px 0 16px;letter-spacing:-0.01em;}
+    .post-content h3{font-family:var(--font);font-size:20px;font-weight:700;color:var(--white);margin:36px 0 12px;}
+    .post-content p{margin-bottom:24px;}
+    .post-content ul,.post-content ol{margin:0 0 24px 24px;}
+    .post-content li{margin-bottom:8px;}
+    .post-content blockquote{border-left:3px solid var(--green);padding:16px 24px;margin:32px 0;background:rgba(118,185,0,0.04);font-style:italic;color:var(--muted);}
+    .post-content code{font-family:'Courier New',monospace;background:var(--panel);color:var(--green);padding:2px 7px;font-size:14px;border:1px solid var(--border);}
+    .post-content pre{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);padding:24px;margin:32px 0;overflow-x:auto;font-size:13px;line-height:1.6;}
+    .post-content pre code{background:none;border:none;padding:0;color:#9fd600;}
+    .post-content hr{border:none;border-top:1px solid var(--border);margin:40px 0;}
+    .post-content a{color:var(--green);text-decoration:underline;text-decoration-color:rgba(118,185,0,0.3);}
+    .post-content a:hover{text-decoration-color:var(--green);}
+    .post-content strong{color:var(--white);font-family:var(--font);}
+    .post-sidebar{position:sticky;top:calc(var(--nav-h) + 24px);}
+    .sidebar-card{background:var(--panel);border:1px solid var(--border);padding:24px;margin-bottom:20px;}
+    .sidebar-title{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--white);margin-bottom:16px;}
+    .toc-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+    .toc-list li a{font-size:12px;color:var(--muted);transition:color .15s;display:block;padding:4px 0;border-left:2px solid transparent;padding-left:10px;}
+    .toc-list li a:hover,.toc-list li a.active{color:var(--green);border-left-color:var(--green);}
+    .tag-list{display:flex;flex-wrap:wrap;gap:8px;}
+    .tag{padding:4px 10px;border:1px solid var(--border);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
+    .cta-card{background:rgba(118,185,0,0.07);border:1px solid rgba(118,185,0,0.2);padding:24px;}
+    .cta-card p{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6;}
+    .btn-cta{display:block;text-align:center;padding:11px 16px;background:var(--green);color:var(--black);font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;}
+    .btn-cta:hover{background:#9fd600;}
+    .post-nav{max-width:860px;margin:0 auto;padding:0 24px 80px;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .post-nav-card{background:var(--panel);border:1px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:6px;}
+    .post-nav-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);}
+    .post-nav-title{font-size:14px;font-weight:600;color:var(--text);}
+    footer{background:#050505;border-top:1px solid var(--border);padding:32px 24px;text-align:center;}
+    footer p{font-size:12px;color:var(--mid);}
+    footer a{color:var(--green);}
+    @media(max-width:900px){.post-layout{grid-template-columns:1fr;}.post-sidebar{display:none;}.post-nav{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../index.html">
+      <div class="nav-logo-mark"></div>
+      <div class="nav-logo-text"><span>DRS</span> Derivative Research Systems</div>
+    </a>
+    <a href="index.html" class="nav-back">← All Insights</a>
+  </div>
+</nav>
+<header class="post-header">
+  <div class="post-header-inner">
+    <div class="post-breadcrumb">
+      <a href="../index.html">Home</a><span>/</span>
+      <a href="index.html">Insights</a><span>/</span>
+      <span>Architecture</span>
+    </div>
+    <div class="post-cat-badge">Architecture</div>
+    <h1 class="post-title">The Hidden Cost of Technical Debt for Mid-Market Companies</h1>
+    <p class="post-excerpt-lede">Technical Debt Hidden Costs</p>
+    <div class="post-meta-bar">
+      <div class="post-author">
+        <div class="post-author-avatar">JR</div>
+        <div>
+          <div class="post-author-name">Jeff Rump</div>
+          <div class="post-author-role">Founder &amp; Principal Architect, DRS</div>
+        </div>
+      </div>
+      <div class="post-meta-item"><strong>July 1, 2026</strong></div>
+      <div class="post-meta-item">3 min read</div>
+    </div>
+  </div>
+</header>
+<div class="post-layout">
+  <article class="post-content" id="postContent"><p><strong>The Hidden Cost of Technical Debt for Mid-Market Companies</strong></p><p>What your CFO doesn\'t see --- and why it\'s slowing you down faster
+than you think.</p><p>For: Founders, CTOs, Owners, VPs of Engineering (11--200 employees) ·
+\~5 min read</p><p>There is a line item missing from most mid-market P&Ls. It does not
+appear on the balance sheet, it does not show up in the operating
+budget, and it is rarely discussed in board meetings. But it is costing
+your company real money --- every quarter, compounding quietly --- in
+the form of technical debt.</p><p>Technical debt is the accumulated cost of architectural shortcuts,
+deferred upgrades, and systems held together by institutional knowledge
+rather than engineering discipline. Every codebase accrues it. The
+question is whether you are managing it intentionally or discovering its
+cost in the worst possible moments.</p><p><strong>What Technical Debt Actually Costs</strong></p><p>The direct costs are visible once you know where to look. Developer
+velocity slows as engineers spend increasing proportions of their time
+navigating legacy code rather than building new capability. A feature
+that should take two weeks takes six --- not because your team is slow,
+but because every change requires understanding and preserving a fragile
+system of undocumented dependencies.</p><p>A mid-market company with a \$2M annual engineering budget that has 30%
+of developer time consumed by technical debt is spending \$600,000 per
+year on work that creates no new business value. That is a hiring class,
+a product launch, or a competitive capability that never gets built.</p><p>  -----------------------------------------------------------------
+  <em>*</em>Companies that actively manage technical debt ship features 2x
+  faster and have 50% fewer production incidents than those that
+  don\'t. The investment pays back within 12 months in the majority
+  of cases.<em>*</em></p><p>  -----------------------------------------------------------------</p><p>The indirect costs are harder to quantify but often larger. Technical
+debt concentrates knowledge in the engineers who built the system. When
+one of them leaves --- and they will --- you lose the ability to safely
+modify entire subsystems. Recruiting becomes harder as experienced
+engineers evaluate your stack and decline offers. And customer-facing
+stability problems, which are frequently rooted in technical debt, erode
+the trust that took years to build.</p><p><strong>The Four Warning Signs</strong></p><p>Your organization is carrying unsustainable technical debt if any of
+these are true: your team consistently underestimates delivery timelines
+and nobody knows why; new engineers take more than three months to make
+their first meaningful contribution; you cannot deploy on Fridays
+without anxiety; or your most experienced engineers spend their days
+fighting fires rather than building the future.</p><p><strong>The Right Way to Address It</strong></p><p>Technical debt is not addressed by a rewrite. Rewrites are expensive,
+risky, and rarely successful. It is addressed by making it visible,
+quantifying its carrying cost, and treating paydown as a first-class
+investment with a measurable return.</p><p>The first step is an honest assessment --- not a vendor audit, but a
+structured conversation between your engineering leadership and your
+business leadership about which parts of your system are limiting your
+competitive position and what that limitation costs in concrete business
+terms. That conversation, done well, produces a prioritized roadmap that
+a board can fund and a team can execute.</p><p>+:---------------------------------------------------------------:+
+| <strong>→ Ready to take the next step?</strong>                              |
+|                                                                 |
+| Schedule a 30-minute Technical Debt Assessment with DRS. We     |
+| quantify the carrying cost and build the business case for      |
+| remediation --- in language your CFO will act on.               |
+|                                                                 |
+| advisory@derivativeresearchsystems.com ·                        |
+| derivativeresearchsystems.com                                   |
++-----------------------------------------------------------------+</p></article>
+  <aside class="post-sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">In This Post</div>
+      <ul class="toc-list" id="tocList"></ul>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-title">Tags</div>
+      <div class="tag-list"><span class="tag">Technical Debt</span></div>
+    </div>
+    <div class="cta-card">
+      <div class="sidebar-title">Work With DRS</div>
+      <p>Ready to solve the architecture problem you're reading about?</p>
+      <a href="../index.html#contact" class="btn-cta">Schedule Assessment</a>
+    </div>
+  </aside>
+</div>
+<nav class="post-nav"></nav>
+<footer><p>© 2024–2026 Derivative Research Systems LLC &nbsp;·&nbsp; <a href="../index.html">Home</a> &nbsp;·&nbsp; <a href="index.html">Insights</a> &nbsp;·&nbsp; <a href="../index.html#contact">Contact</a></p></footer>
+<script>
+const content=document.getElementById('postContent');
+const toc=document.getElementById('tocList');
+if(content&&toc){
+  const headings=content.querySelectorAll('h2,h3');
+  headings.forEach((h,i)=>{
+    const id='h'+i;h.id=id;
+    const li=document.createElement('li');
+    li.innerHTML='<a href="#'+id+'"'+(h.tagName==='H3'?' style="padding-left:18px;"':'')+'>'+h.textContent+'</a>';
+    toc.appendChild(li);
+  });
+  const links=toc.querySelectorAll('a');
+  window.addEventListener('scroll',()=>{
+    let cur='';
+    headings.forEach(h=>{if(window.scrollY>=h.offsetTop-120)cur=h.id;});
+    links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+  });
+}
+</script>
+</body>
+</html>

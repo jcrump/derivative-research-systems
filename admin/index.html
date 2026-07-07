@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DRS Blog Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --green:#76b900;--green-dk:#5a8c00;--green-lt:#9fd600;
+      --black:#000;--surface:#0a0a0a;--panel:#111;--panel2:#161616;
+      --border:#222;--border2:#2a2a2a;--mid:#444;
+      --text:#e8e8e8;--muted:#888;--white:#fff;
+      --font:'Inter',system-ui,sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html,body{height:100%;}
+    body{background:var(--black);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;}
+    a{color:inherit;text-decoration:none;}
+    button,input,select,textarea{font-family:var(--font);}
+    button{cursor:pointer;}
+    ::-webkit-scrollbar{width:6px;height:6px;}
+    ::-webkit-scrollbar-track{background:var(--panel);}
+    ::-webkit-scrollbar-thumb{background:var(--mid);border-radius:3px;}
+
+    /* TOPBAR */
+    .topbar{height:52px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px;flex-shrink:0;z-index:50;}
+    .topbar-logo{display:flex;align-items:center;gap:8px;}
+    .logo-mark{width:24px;height:24px;background:var(--green);clip-path:polygon(0 0,100% 0,100% 60%,60% 100%,0 100%);}
+    .topbar-title{font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--white);}
+    .topbar-title span{color:var(--green);}
+    .topbar-sep{width:1px;height:24px;background:var(--border);margin:0 4px;}
+    .topbar-sub{font-size:12px;color:var(--muted);}
+    .topbar-actions{margin-left:auto;display:flex;align-items:center;gap:10px;}
+    .tbtn{padding:6px 14px;font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:1px solid var(--border);color:var(--muted);background:transparent;transition:all .15s;}
+    .tbtn:hover{border-color:var(--green);color:var(--green);}
+    .tbtn-green{background:var(--green);color:var(--black);border-color:var(--green);}
+    .tbtn-green:hover{background:var(--green-lt);border-color:var(--green-lt);color:var(--black);}
+    .tbtn-red{border-color:#c00;color:#c00;}
+    .tbtn-red:hover{background:#c00;color:#fff;}
+
+    /* MAIN LAYOUT */
+    .main{display:flex;flex:1;overflow:hidden;}
+
+    /* SIDEBAR */
+    .sidebar{width:280px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+    .sidebar-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .sidebar-header h3{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);}
+    .sidebar-search{padding:10px 12px;border-bottom:1px solid var(--border);}
+    .sidebar-search input{width:100%;background:var(--panel);border:1px solid var(--border2);color:var(--text);padding:7px 10px;font-size:12px;outline:none;transition:border-color .15s;}
+    .sidebar-search input:focus{border-color:var(--green);}
+    .post-list{flex:1;overflow-y:auto;padding:8px 0;}
+    .post-item{padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;position:relative;}
+    .post-item:hover{background:var(--panel);}
+    .post-item.active{background:rgba(118,185,0,0.07);border-left:2px solid var(--green);}
+    .post-item-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .post-item.active .post-item-title{color:var(--white);}
+    .post-item-meta{font-size:11px;color:var(--muted);}
+    .post-item-cat{display:inline-block;font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--black);background:var(--green);padding:2px 6px;margin-top:4px;}
+    .post-item-del{position:absolute;top:10px;right:10px;opacity:0;font-size:14px;color:var(--mid);transition:opacity .15s,color .15s;}
+    .post-item:hover .post-item-del{opacity:1;}
+    .post-item-del:hover{color:#e55;}
+    .sidebar-empty{padding:40px 20px;text-align:center;color:var(--mid);font-size:12px;}
+
+    /* EDITOR */
+    .editor-pane{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+    .editor-toolbar{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:var(--surface);flex-wrap:wrap;}
+    .edbtn{padding:5px 10px;font-size:11px;font-weight:600;letter-spacing:0.05em;border:1px solid var(--border2);color:var(--muted);background:transparent;transition:all .15s;}
+    .edbtn:hover{border-color:var(--green);color:var(--green);}
+    .edbtn-sep{width:1px;height:20px;background:var(--border);margin:0 4px;}
+    .editor-meta{padding:16px 20px;border-bottom:1px solid var(--border);background:var(--panel);display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;}
+    .meta-group{display:flex;flex-direction:column;gap:4px;}
+    .meta-group.full{grid-column:1/-1;}
+    .meta-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);}
+    .meta-input,.meta-select{background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:7px 10px;font-size:13px;outline:none;width:100%;transition:border-color .15s;}
+    .meta-input:focus,.meta-select:focus{border-color:var(--green);}
+    .meta-select{appearance:none;}
+    .editor-body{flex:1;display:flex;overflow:hidden;}
+    .editor-write{flex:1;display:flex;flex-direction:column;border-right:1px solid var(--border);}
+    .editor-write textarea{flex:1;background:var(--panel2);color:var(--text);border:none;padding:24px;font-size:15px;line-height:1.8;resize:none;outline:none;font-family:'Courier New',monospace;}
+    .editor-preview{flex:1;overflow-y:auto;padding:32px;background:var(--black);}
+    .preview-placeholder{color:var(--mid);font-size:13px;text-align:center;padding-top:80px;}
+
+    /* PREVIEW STYLING inside editor */
+    .preview-content h1{font-size:28px;font-weight:900;color:var(--white);margin-bottom:12px;letter-spacing:-0.02em;}
+    .preview-content h2{font-size:22px;font-weight:800;color:var(--white);margin:36px 0 12px;}
+    .preview-content h3{font-size:18px;font-weight:700;color:var(--white);margin:28px 0 10px;}
+    .preview-content p{font-size:15px;color:#ccc;line-height:1.8;margin-bottom:18px;}
+    .preview-content ul,.preview-content ol{margin:0 0 18px 24px;color:#aaa;}
+    .preview-content li{margin-bottom:6px;font-size:15px;}
+    .preview-content blockquote{border-left:3px solid var(--green);padding:12px 20px;margin:24px 0;background:rgba(118,185,0,0.04);color:var(--muted);font-style:italic;}
+    .preview-content code{background:var(--panel);color:var(--green);padding:2px 6px;font-size:13px;border:1px solid var(--border);}
+    .preview-content pre{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);padding:20px;margin:24px 0;overflow-x:auto;}
+    .preview-content pre code{background:none;border:none;padding:0;font-size:13px;color:#9fd600;}
+    .preview-content hr{border:none;border-top:1px solid var(--border);margin:32px 0;}
+    .preview-content strong{color:var(--white);}
+    .preview-content a{color:var(--green);}
+    .preview-meta{font-size:11px;color:var(--muted);margin-bottom:20px;display:flex;gap:16px;flex-wrap:wrap;}
+    .preview-meta span{display:inline-flex;align-items:center;gap:6px;}
+    .preview-cat{background:var(--green);color:var(--black);font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:3px 8px;}
+
+    /* STATUS BAR */
+    .status-bar{height:28px;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:16px;flex-shrink:0;}
+    .status-dot{width:6px;height:6px;border-radius:50%;background:var(--mid);}
+    .status-dot.saved{background:var(--green);}
+    .status-dot.unsaved{background:#e5a000;}
+    .status-txt{font-size:11px;color:var(--muted);}
+    .word-count{margin-left:auto;font-size:11px;color:var(--mid);}
+
+    /* EXPORT MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;display:none;align-items:center;justify-content:center;}
+    .modal-overlay.open{display:flex;}
+    .modal{background:var(--panel);border:1px solid var(--border);border-top:2px solid var(--green);width:640px;max-width:95vw;max-height:85vh;display:flex;flex-direction:column;}
+    .modal-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .modal-title{font-size:14px;font-weight:700;color:var(--white);letter-spacing:0.04em;}
+    .modal-close{background:none;border:none;color:var(--muted);font-size:18px;padding:4px;}
+    .modal-close:hover{color:var(--white);}
+    .modal-body{padding:24px;overflow-y:auto;flex:1;}
+    .modal-body p{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6;}
+    .code-block{background:var(--surface);border:1px solid var(--border);padding:16px;font-family:'Courier New',monospace;font-size:11px;color:#9fd600;overflow-x:auto;white-space:pre;margin-bottom:16px;max-height:300px;overflow-y:auto;}
+    .modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:40px;right:24px;background:var(--green);color:var(--black);padding:10px 20px;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;z-index:300;transform:translateY(20px);opacity:0;transition:all .25s;}
+    .toast.show{transform:none;opacity:1;}
+    .toast.error{background:#c00;color:#fff;}
+
+    /* NO POST SELECTED */
+    .no-selection{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;color:var(--mid);}
+    .no-selection h2{font-size:20px;color:var(--mid);}
+    .no-selection p{font-size:13px;}
+
+    @media(max-width:768px){
+      .editor-meta{grid-template-columns:1fr 1fr;}
+      .sidebar{width:220px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <div class="logo-mark"></div>
+    <div class="topbar-title"><span>DRS</span> Blog Admin</div>
+  </div>
+  <div class="topbar-sep"></div>
+  <div class="topbar-sub">Insights CMS</div>
+  <div class="topbar-actions">
+    <button class="tbtn" onclick="togglePreview()" id="previewToggle">Show Preview</button>
+    <button class="tbtn" onclick="openExportModal()">Publish…</button>
+    <button class="tbtn tbtn-green" onclick="savePost()" id="saveBtn">Save Post</button>
+    <a href="config.html" class="tbtn">Site Config</a>
+    <a href="../blog/index.html" class="tbtn" target="_blank">View Blog →</a>
+    <a href="../index.html" class="tbtn" target="_blank">View Site →</a>
+  </div>
+</div>
+
+<div class="main">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h3>Posts (<span id="postCount">0</span>)</h3>
+      <button class="tbtn tbtn-green" onclick="newPost()" style="padding:4px 10px;font-size:10px;">+ New</button>
+    </div>
+    <div class="sidebar-search">
+      <input type="text" placeholder="Search posts…" id="sidebarSearch" oninput="renderSidebar()"/>
+    </div>
+    <div class="post-list" id="postList"></div>
+  </div>
+
+  <!-- EDITOR -->
+  <div class="editor-pane" id="editorPane">
+    <div class="no-selection" id="noSelection">
+      <h2>No post selected</h2>
+      <p>Create a new post or select one from the sidebar.</p>
+      <button class="tbtn tbtn-green" onclick="newPost()" style="padding:10px 24px;font-size:12px;">+ Create First Post</button>
+    </div>
+
+    <div id="editorMain" style="display:none;flex:1;flex-direction:column;overflow:hidden;display:none;">
+      <!-- Formatting toolbar -->
+      <div class="editor-toolbar">
+        <button class="edbtn" onclick="fmt('**','**')" title="Bold">B</button>
+        <button class="edbtn" onclick="fmt('*','*')" title="Italic" style="font-style:italic;">I</button>
+        <button class="edbtn" onclick="fmt('`','`')" title="Inline code">&#x3C;&#x3E;</button>
+        <div class="edbtn-sep"></div>
+        <button class="edbtn" onclick="insertHeading(2)">H2</button>
+        <button class="edbtn" onclick="insertHeading(3)">H3</button>
+        <div class="edbtn-sep"></div>
+        <button class="edbtn" onclick="insertBlock('> ')">Quote</button>
+        <button class="edbtn" onclick="insertBlock('- ')">List</button>
+        <button class="edbtn" onclick="insertCodeBlock()">Code Block</button>
+        <button class="edbtn" onclick="insertBlock('---\n')">HR</button>
+        <div class="edbtn-sep"></div>
+        <button class="edbtn" onclick="insertLink()">Link</button>
+      </div>
+
+      <!-- Meta fields -->
+      <div class="editor-meta">
+        <div class="meta-group">
+          <div class="meta-label">Title</div>
+          <input class="meta-input" id="metaTitle" placeholder="Post title…" oninput="onMetaChange()"/>
+        </div>
+        <div class="meta-group">
+          <div class="meta-label">Slug (URL)</div>
+          <input class="meta-input" id="metaSlug" placeholder="my-post-slug"/>
+        </div>
+        <div class="meta-group">
+          <div class="meta-label">Category</div>
+          <select class="meta-select" id="metaCategory" oninput="onMetaChange()">
+            <option>Architecture</option>
+            <option>Security</option>
+            <option>Modernization</option>
+            <option>Cloud</option>
+            <option>Engineering</option>
+            <option>Advisory</option>
+          </select>
+        </div>
+        <div class="meta-group">
+          <div class="meta-label">Read Time</div>
+          <input class="meta-input" id="metaReadTime" placeholder="5 min read"/>
+        </div>
+        <div class="meta-group full">
+          <div class="meta-label">Excerpt (used in listings &amp; SEO)</div>
+          <input class="meta-input" id="metaExcerpt" placeholder="One-sentence summary of this post…" oninput="onMetaChange()"/>
+        </div>
+        <div class="meta-group">
+          <div class="meta-label">Tags (comma-separated)</div>
+          <input class="meta-input" id="metaTags" placeholder="Kafka, Java, Microservices"/>
+        </div>
+        <div class="meta-group">
+          <div class="meta-label">Publish Date</div>
+          <input class="meta-input" id="metaDate" type="date"/>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="editor-body">
+        <div class="editor-write">
+          <textarea id="bodyEditor" placeholder="Write your post in Markdown…&#10;&#10;# Use headings&#10;**bold**, *italic*, `code`&#10;&#10;```java&#10;// code block&#10;```&#10;&#10;&gt; Blockquotes&#10;- Bullet lists" oninput="onBodyChange()"></textarea>
+        </div>
+        <div class="editor-preview" id="editorPreview" style="display:none;">
+          <div class="preview-placeholder" id="previewPlaceholder">Preview will appear here…</div>
+          <div class="preview-meta" id="previewMeta" style="display:none;"></div>
+          <div class="preview-content" id="previewContent"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <div class="status-dot" id="statusDot"></div>
+  <div class="status-txt" id="statusTxt">No post open</div>
+  <div class="word-count" id="wordCount"></div>
+</div>
+
+<!-- EXPORT MODAL -->
+<div class="modal-overlay" id="exportModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Export Blog Files</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p>To publish your blog, download these files and place them in the <code>blog/</code> folder of your site. The admin tool handles all post HTML generation — each post becomes a standalone file.</p>
+      <div style="margin-bottom:12px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Files to save:</div>
+        <div id="exportFileList" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+      <div id="exportInstructions" style="background:rgba(118,185,0,0.06);border:1px solid rgba(118,185,0,0.2);padding:16px;font-size:12px;color:var(--muted);line-height:1.7;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="tbtn" onclick="closeModal()">Close</button>
+      <button class="tbtn" onclick="downloadAll()">Download All (fallback)</button>
+      <button class="tbtn tbtn-green" id="publishBtn" onclick="publishToSite()">⚡ Publish Directly to blog/</button>
+    </div>
+    <div style="padding:10px 24px 16px;font-size:12px;color:var(--muted);" id="publishStatus"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── STATE ── */
+let posts = JSON.parse(localStorage.getItem('drs_posts') || '[]');
+let currentId = null;
+let previewVisible = false;
+let dirty = false;
+
+/* ── UTILS ── */
+function slugify(s) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+}
+function today() {
+  return new Date().toISOString().split('T')[0];
+}
+function fmtDate(d) {
+  return new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+}
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function words(s) { return s.trim().split(/\s+/).filter(Boolean).length; }
+function readTime(s) { return Math.max(1, Math.ceil(words(s)/200)) + ' min read'; }
+
+function showToast(msg, err) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (err ? ' error' : '');
+  setTimeout(() => t.className = 'toast', 2500);
+}
+
+function setStatus(saved) {
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusTxt');
+  if (currentId) {
+    const p = posts.find(p=>p.id===currentId);
+    dot.className = 'status-dot ' + (saved ? 'saved' : 'unsaved');
+    txt.textContent = saved ? `"${p?.title||'Untitled'}" saved` : 'Unsaved changes';
+  } else {
+    dot.className = 'status-dot';
+    txt.textContent = 'No post open';
+  }
+}
+
+/* ── SIDEBAR ── */
+function renderSidebar() {
+  const list = document.getElementById('postList');
+  const search = document.getElementById('sidebarSearch').value.toLowerCase();
+  document.getElementById('postCount').textContent = posts.length;
+
+  const filtered = posts.filter(p =>
+    !search || p.title.toLowerCase().includes(search) || (p.excerpt||'').toLowerCase().includes(search)
+  ).sort((a,b) => (b.date||'').localeCompare(a.date||''));
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="sidebar-empty">${search?'No posts match.':'No posts yet. Create one!'}</div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(p => `
+    <div class="post-item ${p.id===currentId?'active':''}" onclick="openPost('${p.id}')">
+      <button class="post-item-del" onclick="event.stopPropagation();deletePost('${p.id}')" title="Delete">✕</button>
+      <div class="post-item-title">${p.title||'Untitled'}</div>
+      <div class="post-item-meta">${p.date ? fmtDate(p.date) : 'No date'}</div>
+      ${p.category ? `<span class="post-item-cat">${p.category}</span>` : ''}
+    </div>`).join('');
+}
+
+/* ── NEW / OPEN ── */
+function newPost() {
+  const p = {
+    id: uid(), title:'', slug:'', excerpt:'', category:'Architecture',
+    tags:'', date: today(), body:'', readTime:'5 min read'
+  };
+  posts.push(p);
+  savePosts();
+  openPost(p.id);
+}
+
+function openPost(id) {
+  const p = posts.find(x=>x.id===id);
+  if (!p) return;
+  currentId = id;
+  document.getElementById('noSelection').style.display = 'none';
+  const em = document.getElementById('editorMain');
+  em.style.display = 'flex';
+  em.style.flexDirection = 'column';
+  em.style.flex = '1';
+  em.style.overflow = 'hidden';
+
+  document.getElementById('metaTitle').value = p.title||'';
+  document.getElementById('metaSlug').value = p.slug||'';
+  document.getElementById('metaExcerpt').value = p.excerpt||'';
+  document.getElementById('metaCategory').value = p.category||'Architecture';
+  document.getElementById('metaTags').value = p.tags||'';
+  document.getElementById('metaDate').value = p.date||today();
+  document.getElementById('metaReadTime').value = p.readTime||'5 min read';
+  document.getElementById('bodyEditor').value = p.body||'';
+
+  updateWordCount();
+  renderPreview();
+  renderSidebar();
+  setStatus(true);
+  dirty = false;
+}
+
+function currentPost() { return posts.find(p=>p.id===currentId); }
+
+function onMetaChange() {
+  const p = currentPost(); if (!p) return;
+  const title = document.getElementById('metaTitle').value;
+  if (title && !p.slug) {
+    document.getElementById('metaSlug').value = slugify(title);
+  }
+  dirty = true;
+  setStatus(false);
+  renderPreview();
+}
+
+function onBodyChange() {
+  updateWordCount();
+  dirty = true;
+  setStatus(false);
+  if (previewVisible) renderPreview();
+}
+
+function updateWordCount() {
+  const body = document.getElementById('bodyEditor')?.value || '';
+  const wc = words(body);
+  document.getElementById('wordCount').textContent = `${wc} words · ~${readTime(body)}`;
+  const rtEl = document.getElementById('metaReadTime');
+  if (rtEl && (!rtEl.value || rtEl.value.endsWith('min read'))) {
+    rtEl.value = readTime(body);
+  }
+}
+
+function deletePost(id) {
+  if (!confirm('Delete this post?')) return;
+  posts = posts.filter(p=>p.id!==id);
+  savePosts();
+  if (currentId === id) {
+    currentId = null;
+    document.getElementById('noSelection').style.display = '';
+    document.getElementById('editorMain').style.display = 'none';
+    setStatus(false);
+  }
+  renderSidebar();
+  showToast('Post deleted');
+}
+
+function savePost() {
+  const p = currentPost(); if (!p) return;
+  p.title = document.getElementById('metaTitle').value || 'Untitled';
+  p.slug = document.getElementById('metaSlug').value || slugify(p.title);
+  p.excerpt = document.getElementById('metaExcerpt').value;
+  p.category = document.getElementById('metaCategory').value;
+  p.tags = document.getElementById('metaTags').value;
+  p.date = document.getElementById('metaDate').value || today();
+  p.readTime = document.getElementById('metaReadTime').value || readTime(p.body||'');
+  p.body = document.getElementById('bodyEditor').value;
+  savePosts();
+  dirty = false;
+  setStatus(true);
+  renderSidebar();
+  showToast('Post saved');
+}
+
+function savePosts() {
+  localStorage.setItem('drs_posts', JSON.stringify(posts));
+}
+
+/* ── MARKDOWN RENDERER (no deps) ── */
+function renderMD(md) {
+  if (!md) return '';
+  let html = md
+    // Code blocks
+    .replace(/```(\w*)\n([\s\S]*?)```/g, (_,lang,code) =>
+      `<pre><code class="lang-${lang}">${escHtml(code.trim())}</code></pre>`)
+    // Headings
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    // HR
+    .replace(/^---$/gm, '<hr/>')
+    // Blockquotes
+    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    // Bold/italic/code
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    // Links
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+    // Unordered lists
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, m => `<ul>${m}</ul>`)
+    // Ordered lists
+    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+    // Paragraphs
+    .replace(/\n\n/g, '</p><p>')
+  ;
+  // Wrap in paragraphs
+  html = '<p>' + html + '</p>';
+  // Clean up empty/malformed paras
+  html = html.replace(/<p><\/p>/g,'').replace(/<p>(<h[1-6]|<ul|<ol|<blockquote|<pre|<hr)/g,'$1').replace(/(<\/h[1-6]>|<\/ul>|<\/ol>|<\/blockquote>|<\/pre>|<\/hr>)<\/p>/g,'$1');
+  return html;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderPreview() {
+  const p = currentPost();
+  const content = document.getElementById('previewContent');
+  const meta = document.getElementById('previewMeta');
+  const placeholder = document.getElementById('previewPlaceholder');
+  if (!p || !previewVisible) return;
+  const body = document.getElementById('bodyEditor')?.value || '';
+  const title = document.getElementById('metaTitle').value;
+  const cat = document.getElementById('metaCategory').value;
+  const excerpt = document.getElementById('metaExcerpt').value;
+  const date = document.getElementById('metaDate').value;
+  if (!body && !title) {
+    placeholder.style.display = '';
+    content.innerHTML = '';
+    meta.style.display = 'none';
+    return;
+  }
+  placeholder.style.display = 'none';
+  meta.style.display = 'flex';
+  meta.innerHTML = `
+    <span><span class="preview-cat">${cat}</span></span>
+    <span>${date ? fmtDate(date) : ''}</span>
+    <span>${readTime(body)}</span>
+  `;
+  content.innerHTML = (title ? `<h1>${escHtml(title)}</h1>` : '') +
+    (excerpt ? `<p style="color:#76b900;font-size:16px;margin-bottom:24px;">${escHtml(excerpt)}</p>` : '') +
+    renderMD(body);
+}
+
+/* ── PREVIEW TOGGLE ── */
+function togglePreview() {
+  previewVisible = !previewVisible;
+  document.getElementById('editorPreview').style.display = previewVisible ? 'block' : 'none';
+  document.getElementById('previewToggle').textContent = previewVisible ? 'Hide Preview' : 'Show Preview';
+  if (previewVisible) renderPreview();
+}
+
+/* ── TOOLBAR HELPERS ── */
+function fmt(before, after) {
+  const ta = document.getElementById('bodyEditor');
+  const start = ta.selectionStart, end = ta.selectionEnd;
+  const sel = ta.value.slice(start, end);
+  const replacement = before + (sel || 'text') + after;
+  ta.setRangeText(replacement, start, end, 'select');
+  ta.focus();
+  onBodyChange();
+}
+function insertHeading(level) {
+  const ta = document.getElementById('bodyEditor');
+  const start = ta.selectionStart;
+  const line = '#'.repeat(level) + ' ';
+  ta.setRangeText('\n' + line, start, start, 'end');
+  ta.focus();
+  onBodyChange();
+}
+function insertBlock(prefix) {
+  const ta = document.getElementById('bodyEditor');
+  const start = ta.selectionStart;
+  ta.setRangeText('\n' + prefix, start, start, 'end');
+  ta.focus();
+  onBodyChange();
+}
+function insertCodeBlock() {
+  const ta = document.getElementById('bodyEditor');
+  const start = ta.selectionStart;
+  const snippet = '\n```java\n// your code here\n```\n';
+  ta.setRangeText(snippet, start, start, 'end');
+  ta.focus();
+  onBodyChange();
+}
+function insertLink() {
+  const url = prompt('URL:');
+  if (!url) return;
+  const label = prompt('Link text:') || url;
+  fmt(`[${label}](`, `${url})`);
+}
+
+/* ── EXPORT ── */
+function buildPostHTML(p) {
+  // Load template and substitute
+  const tagLinks = (p.tags||'').split(',').map(t=>t.trim()).filter(Boolean)
+    .map(t=>`<span class="tag">${escHtml(t)}</span>`).join('');
+
+  const bodyHTML = renderMD(p.body||'');
+
+  let tmpl = POST_TEMPLATE
+    .replace(/\{\{POST_TITLE\}\}/g, escHtml(p.title||'Untitled'))
+    .replace(/\{\{POST_EXCERPT\}\}/g, escHtml(p.excerpt||''))
+    .replace(/\{\{POST_CATEGORY\}\}/g, escHtml(p.category||''))
+    .replace(/\{\{POST_DATE\}\}/g, fmtDate(p.date||today()))
+    .replace(/\{\{POST_READ_TIME\}\}/g, escHtml(p.readTime||'5 min read'))
+    .replace(/\{\{POST_BODY\}\}/g, bodyHTML)
+    .replace(/\{\{POST_TAGS\}\}/g, tagLinks)
+    .replace('{{POST_PREV}}', '')
+    .replace('{{POST_NEXT}}', '');
+  return tmpl;
+}
+
+function buildRegistry() {
+  const entries = posts.map(p => `  {
+    slug: "${p.slug||slugify(p.title||'untitled')}",
+    title: ${JSON.stringify(p.title||'Untitled')},
+    excerpt: ${JSON.stringify(p.excerpt||'')},
+    category: ${JSON.stringify(p.category||'')},
+    date: "${fmtDate(p.date||today())}",
+    readTime: ${JSON.stringify(p.readTime||'5 min read')},
+    tags: ${JSON.stringify((p.tags||'').split(',').map(t=>t.trim()).filter(Boolean))}
+  }`).join(',\n');
+  return `// DRS Blog Registry\n// Auto-generated by Blog Admin — do not edit by hand.\nvar DRS_BLOG_POSTS = [\n${entries}\n];\n`;
+}
+
+/* ── FILE SYSTEM ACCESS API PUBLISH ─────────────────────────────── */
+// Persists the directory handle across sessions so user only picks once
+let _dirHandle = null;
+
+async function getOrPickBlogDir() {
+  // Try to reuse a previously granted handle stored in IndexedDB
+  const stored = await idbGet('blogDirHandle');
+  if (stored) {
+    const perm = await stored.queryPermission({ mode: 'readwrite' });
+    if (perm === 'granted') { _dirHandle = stored; return stored; }
+    const req = await stored.requestPermission({ mode: 'readwrite' });
+    if (req === 'granted') { _dirHandle = stored; return stored; }
+  }
+  // Prompt user to pick the blog/ folder
+  try {
+    const handle = await window.showDirectoryPicker({
+      id: 'drs-blog',
+      mode: 'readwrite',
+      startIn: 'documents',
+    });
+    await idbSet('blogDirHandle', handle);
+    _dirHandle = handle;
+    return handle;
+  } catch (e) {
+    if (e.name !== 'AbortError') throw e;
+    return null;
+  }
+}
+
+async function writeFileToDir(dirHandle, filename, content) {
+  const fileHandle = await dirHandle.getFileHandle(filename, { create: true });
+  const writable   = await fileHandle.createWritable();
+  await writable.write(content);
+  await writable.close();
+}
+
+async function publishToSite() {
+  if (!posts.length) { showToast('No posts to publish', true); return; }
+
+  const fsSupported = 'showDirectoryPicker' in window;
+
+  if (!fsSupported) {
+    // Fallback: traditional download for Firefox / Safari
+    openExportModal();
+    return;
+  }
+
+  setPublishStatus('picking');
+  const dir = await getOrPickBlogDir().catch(() => null);
+  if (!dir) { setPublishStatus('idle'); return; }
+
+  setPublishStatus('writing');
+  try {
+    // Write registry
+    await writeFileToDir(dir, 'blog-registry.js', buildRegistry());
+
+    // Write each post HTML
+    for (const p of posts) {
+      const slug = p.slug || slugify(p.title || 'untitled');
+      await writeFileToDir(dir, slug + '.html', buildPostHTML(p));
+    }
+
+    await idbSet('lastPublished', new Date().toISOString());
+    setPublishStatus('done');
+    showToast(`✓ Published ${posts.length} post${posts.length>1?'s':''} to blog/`);
+    closeModal();
+  } catch (err) {
+    console.error(err);
+    setPublishStatus('idle');
+    showToast('Write failed — ' + err.message, true);
+  }
+}
+
+function setPublishStatus(state) {
+  const btn = document.getElementById('publishBtn');
+  const statusEl = document.getElementById('publishStatus');
+  if (!btn) return;
+  const states = {
+    idle:    { label: '⚡ Publish Directly to blog/', disabled: false, msg: '' },
+    picking: { label: 'Choose folder…',               disabled: true,  msg: 'Select your <code>blog/</code> folder when prompted.' },
+    writing: { label: 'Writing files…',               disabled: true,  msg: 'Writing files directly to disk…' },
+    done:    { label: '✓ Published',                  disabled: false, msg: 'Files written. Refresh <a href="../blog/index.html" target="_blank">blog/</a> to see posts.' },
+  };
+  const s = states[state] || states.idle;
+  btn.textContent = s.label;
+  btn.disabled = s.disabled;
+  if (statusEl) statusEl.innerHTML = s.msg;
+}
+
+/* ── INDEXEDDB HELPERS (for persisting dir handle) ── */
+function idbOpen() {
+  return new Promise((res, rej) => {
+    const req = indexedDB.open('drs-admin', 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore('kv');
+    req.onsuccess = e => res(e.target.result);
+    req.onerror   = e => rej(e.target.error);
+  });
+}
+async function idbGet(key) {
+  const db = await idbOpen();
+  return new Promise((res, rej) => {
+    const tx = db.transaction('kv', 'readonly');
+    const req = tx.objectStore('kv').get(key);
+    req.onsuccess = e => res(e.target.result);
+    req.onerror   = e => rej(e.target.error);
+  });
+}
+async function idbSet(key, val) {
+  const db = await idbOpen();
+  return new Promise((res, rej) => {
+    const tx = db.transaction('kv', 'readwrite');
+    tx.objectStore('kv').put(val, key);
+    tx.oncomplete = () => res();
+    tx.onerror    = e => rej(e.target.error);
+  });
+}
+
+/* ── FALLBACK DOWNLOAD (Firefox / Safari) ── */
+function downloadAll() {
+  const reg = buildRegistry();
+  const regBlob = new Blob([reg], {type:'text/javascript'});
+  const regA = document.createElement('a');
+  regA.href = URL.createObjectURL(regBlob);
+  regA.download = 'blog-registry.js';
+  regA.click();
+  posts.forEach((p, i) => {
+    setTimeout(() => {
+      const html = buildPostHTML(p);
+      const slug = p.slug || slugify(p.title||'untitled');
+      const blob = new Blob([html], {type:'text/html'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = slug + '.html';
+      a.click();
+    }, (i+1) * 400);
+  });
+  showToast(`Downloading ${posts.length + 1} files — move them to blog/`);
+}
+
+function openExportModal() {
+  if (!posts.length) { showToast('No posts to publish', true); return; }
+  const fsSupported = 'showDirectoryPicker' in window;
+  const list = document.getElementById('exportFileList');
+  list.innerHTML = [
+    `<div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);padding:10px 14px;">
+      <span style="font-size:12px;color:var(--green);font-weight:600;">blog/blog-registry.js</span>
+      <button class="tbtn" onclick="downloadSingle('registry')" style="padding:4px 10px;font-size:10px;">Download</button>
+    </div>`,
+    ...posts.map(p => {
+      const slug = p.slug || slugify(p.title||'untitled');
+      return `<div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);padding:10px 14px;">
+        <span style="font-size:12px;color:var(--text);">blog/${slug}.html <span style="color:var(--muted);"> — ${p.title}</span></span>
+        <button class="tbtn" onclick="downloadSingle('${p.id}')" style="padding:4px 10px;font-size:10px;">Download</button>
+      </div>`;
+    })
+  ].join('');
+
+  document.getElementById('exportInstructions').innerHTML = fsSupported
+    ? `<strong style="color:var(--text);">Chrome / Edge:</strong> Use <strong>⚡ Publish Directly</strong> above — picks your <code>blog/</code> folder once and writes all files instantly, no moving required.<br/><br/>
+       <strong style="color:var(--text);">Firefox / Safari fallback:</strong> Download files below and move them into your <code>blog/</code> folder.`
+    : `<strong style="color:var(--text);">How to publish:</strong><br/>
+       1. Download all files below.<br/>
+       2. Move <code>blog-registry.js</code> and <code>*.html</code> post files into your <code>blog/</code> folder.<br/>
+       3. Refresh the site.`;
+  document.getElementById('exportModal').classList.add('open');
+  // Update publish button state
+  setTimeout(() => setPublishStatus('idle'), 50);
+}
+
+function downloadSingle(id) {
+  if (id === 'registry') {
+    const reg = buildRegistry();
+    const blob = new Blob([reg], {type:'text/javascript'});
+    const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='blog-registry.js'; a.click();
+  } else {
+    const p = posts.find(x=>x.id===id); if (!p) return;
+    const html = buildPostHTML(p);
+    const slug = p.slug || slugify(p.title||'untitled');
+    const blob = new Blob([html], {type:'text/html'});
+    const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=slug+'.html'; a.click();
+  }
+}
+
+function closeModal() {
+  document.getElementById('exportModal').classList.remove('open');
+}
+
+/* ── POST TEMPLATE (embedded) ── */
+const POST_TEMPLATE = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{POST_TITLE}} | DRS Insights</title>
+  <meta name="description" content="{{POST_EXCERPT}}"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--green:#76b900;--green-dk:#5a8c00;--black:#000;--surface:#0a0a0a;--panel:#111;--border:#222;--mid:#444;--text:#e8e8e8;--muted:#888;--white:#fff;--nav-h:60px;--font:'Inter',system-ui,sans-serif;--serif:'Merriweather',Georgia,serif;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--black);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);background:rgba(0,0,0,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;}
+    .nav-inner{width:100%;max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;}
+    .nav-logo{display:flex;align-items:center;gap:10px;margin-right:auto;}
+    .nav-logo-mark{width:28px;height:28px;background:var(--green);clip-path:polygon(0 0,100% 0,100% 60%,60% 100%,0 100%);}
+    .nav-logo-text{font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--white);}
+    .nav-logo-text span{color:var(--green);}
+    .nav-back{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;display:flex;align-items:center;gap:6px;transition:color .15s;}
+    .nav-back:hover{color:var(--green);}
+    .post-header{padding:calc(var(--nav-h) + 80px) 24px 60px;background:var(--surface);border-bottom:1px solid var(--border);}
+    .post-header-inner{max-width:860px;margin:0 auto;}
+    .post-breadcrumb{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:24px;}
+    .post-breadcrumb a:hover{color:var(--green);}
+    .post-breadcrumb span{color:var(--mid);}
+    .post-cat-badge{display:inline-block;background:var(--green);color:var(--black);font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;margin-bottom:20px;}
+    .post-title{font-size:clamp(28px,5vw,52px);font-weight:900;letter-spacing:-0.02em;color:var(--white);line-height:1.08;margin-bottom:20px;}
+    .post-excerpt-lede{font-size:18px;color:var(--muted);line-height:1.6;margin-bottom:32px;font-weight:300;}
+    .post-meta-bar{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding-top:24px;border-top:1px solid var(--border);}
+    .post-author{display:flex;align-items:center;gap:12px;}
+    .post-author-avatar{width:36px;height:36px;background:var(--green);clip-path:polygon(0 0,100% 0,100% 60%,60% 100%,0 100%);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:var(--black);}
+    .post-author-name{font-size:13px;font-weight:600;color:var(--text);}
+    .post-author-role{font-size:11px;color:var(--muted);}
+    .post-meta-item{font-size:12px;color:var(--muted);}
+    .post-meta-item strong{color:var(--text);}
+    .post-layout{max-width:1100px;margin:0 auto;padding:64px 24px;display:grid;grid-template-columns:1fr 260px;gap:64px;align-items:start;}
+    .post-content{font-family:var(--serif);font-size:17px;line-height:1.85;color:#ccc;}
+    .post-content h2{font-family:var(--font);font-size:26px;font-weight:800;color:var(--white);margin:48px 0 16px;letter-spacing:-0.01em;}
+    .post-content h3{font-family:var(--font);font-size:20px;font-weight:700;color:var(--white);margin:36px 0 12px;}
+    .post-content p{margin-bottom:24px;}
+    .post-content ul,.post-content ol{margin:0 0 24px 24px;}
+    .post-content li{margin-bottom:8px;}
+    .post-content blockquote{border-left:3px solid var(--green);padding:16px 24px;margin:32px 0;background:rgba(118,185,0,0.04);font-style:italic;color:var(--muted);}
+    .post-content code{font-family:'Courier New',monospace;background:var(--panel);color:var(--green);padding:2px 7px;font-size:14px;border:1px solid var(--border);}
+    .post-content pre{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);padding:24px;margin:32px 0;overflow-x:auto;font-size:13px;line-height:1.6;}
+    .post-content pre code{background:none;border:none;padding:0;color:#9fd600;}
+    .post-content hr{border:none;border-top:1px solid var(--border);margin:40px 0;}
+    .post-content a{color:var(--green);text-decoration:underline;text-decoration-color:rgba(118,185,0,0.3);}
+    .post-content a:hover{text-decoration-color:var(--green);}
+    .post-content strong{color:var(--white);font-family:var(--font);}
+    .post-sidebar{position:sticky;top:calc(var(--nav-h) + 24px);}
+    .sidebar-card{background:var(--panel);border:1px solid var(--border);padding:24px;margin-bottom:20px;}
+    .sidebar-title{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--white);margin-bottom:16px;}
+    .toc-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+    .toc-list li a{font-size:12px;color:var(--muted);transition:color .15s;display:block;padding:4px 0;border-left:2px solid transparent;padding-left:10px;}
+    .toc-list li a:hover,.toc-list li a.active{color:var(--green);border-left-color:var(--green);}
+    .tag-list{display:flex;flex-wrap:wrap;gap:8px;}
+    .tag{padding:4px 10px;border:1px solid var(--border);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
+    .cta-card{background:rgba(118,185,0,0.07);border:1px solid rgba(118,185,0,0.2);padding:24px;}
+    .cta-card p{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6;}
+    .btn-cta{display:block;text-align:center;padding:11px 16px;background:var(--green);color:var(--black);font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;}
+    .btn-cta:hover{background:#9fd600;}
+    .post-nav{max-width:860px;margin:0 auto;padding:0 24px 80px;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .post-nav-card{background:var(--panel);border:1px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:6px;}
+    .post-nav-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);}
+    .post-nav-title{font-size:14px;font-weight:600;color:var(--text);}
+    footer{background:#050505;border-top:1px solid var(--border);padding:32px 24px;text-align:center;}
+    footer p{font-size:12px;color:var(--mid);}
+    footer a{color:var(--green);}
+    @media(max-width:900px){.post-layout{grid-template-columns:1fr;}.post-sidebar{display:none;}.post-nav{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../index.html">
+      <div class="nav-logo-mark"></div>
+      <div class="nav-logo-text"><span>DRS</span> Derivative Research Systems</div>
+    </a>
+    <a href="index.html" class="nav-back">← All Insights</a>
+  </div>
+</nav>
+<header class="post-header">
+  <div class="post-header-inner">
+    <div class="post-breadcrumb">
+      <a href="../index.html">Home</a><span>/</span>
+      <a href="index.html">Insights</a><span>/</span>
+      <span>{{POST_CATEGORY}}</span>
+    </div>
+    <div class="post-cat-badge">{{POST_CATEGORY}}</div>
+    <h1 class="post-title">{{POST_TITLE}}</h1>
+    <p class="post-excerpt-lede">{{POST_EXCERPT}}</p>
+    <div class="post-meta-bar">
+      <div class="post-author">
+        <div class="post-author-avatar">JR</div>
+        <div>
+          <div class="post-author-name">Jeff Rump</div>
+          <div class="post-author-role">Founder &amp; Principal Architect, DRS</div>
+        </div>
+      </div>
+      <div class="post-meta-item"><strong>{{POST_DATE}}</strong></div>
+      <div class="post-meta-item">{{POST_READ_TIME}}</div>
+    </div>
+  </div>
+</header>
+<div class="post-layout">
+  <article class="post-content" id="postContent">{{POST_BODY}}</article>
+  <aside class="post-sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">In This Post</div>
+      <ul class="toc-list" id="tocList"></ul>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-title">Tags</div>
+      <div class="tag-list">{{POST_TAGS}}</div>
+    </div>
+    <div class="cta-card">
+      <div class="sidebar-title">Work With DRS</div>
+      <p>Ready to solve the architecture problem you're reading about?</p>
+      <a href="../index.html#contact" class="btn-cta">Schedule Assessment</a>
+    </div>
+  </aside>
+</div>
+<nav class="post-nav">{{POST_PREV}}{{POST_NEXT}}</nav>
+<footer><p>© 2024–2026 Derivative Research Systems LLC &nbsp;·&nbsp; <a href="../index.html">Home</a> &nbsp;·&nbsp; <a href="index.html">Insights</a> &nbsp;·&nbsp; <a href="../index.html#contact">Contact</a></p></footer>
+<script>
+const content=document.getElementById('postContent');
+const toc=document.getElementById('tocList');
+if(content&&toc){
+  const headings=content.querySelectorAll('h2,h3');
+  headings.forEach((h,i)=>{
+    const id='h'+i;h.id=id;
+    const li=document.createElement('li');
+    li.innerHTML='<a href="#'+id+'"'+(h.tagName==='H3'?' style="padding-left:18px;"':'')+'>'+h.textContent+'</a>';
+    toc.appendChild(li);
+  });
+  const links=toc.querySelectorAll('a');
+  window.addEventListener('scroll',()=>{
+    let cur='';
+    headings.forEach(h=>{if(window.scrollY>=h.offsetTop-120)cur=h.id;});
+    links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+  });
+}
+<\/script>
+</body>
+</html>`;
+
+/* ── INIT ── */
+renderSidebar();
+</script>
+</body>
+</html>

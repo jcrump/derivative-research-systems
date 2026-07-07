@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DRS Config Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--green:#76b900;--green-lt:#9fd600;--black:#000;--surface:#0a0a0a;--panel:#111;--panel2:#161616;--border:#222;--border2:#2a2a2a;--mid:#444;--text:#e8e8e8;--muted:#888;--white:#fff;--font:'Inter',system-ui,sans-serif;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html,body{height:100%;}
+    body{background:var(--black);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;}
+    a{color:inherit;text-decoration:none;}
+    button,input,select,textarea{font-family:var(--font);}
+    button{cursor:pointer;}
+    ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--panel);} ::-webkit-scrollbar-thumb{background:var(--mid);}
+
+    /* TOPBAR */
+    .topbar{height:52px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px;flex-shrink:0;z-index:50;}
+    .logo-wrap{display:flex;align-items:center;gap:8px;}
+    .logo-mark{width:24px;height:24px;background:var(--green);clip-path:polygon(0 0,100% 0,100% 60%,60% 100%,0 100%);}
+    .logo-txt{font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--white);}
+    .logo-txt span{color:var(--green);}
+    .topbar-sep{width:1px;height:24px;background:var(--border);}
+    .topbar-sub{font-size:12px;color:var(--muted);}
+    .topbar-right{margin-left:auto;display:flex;gap:10px;}
+    .tbtn{padding:6px 16px;font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:1px solid var(--border);color:var(--muted);background:transparent;transition:all .15s;}
+    .tbtn:hover{border-color:var(--green);color:var(--green);}
+    .tbtn-green{background:var(--green);color:var(--black);border-color:var(--green);}
+    .tbtn-green:hover{background:var(--green-lt);border-color:var(--green-lt);color:var(--black);}
+
+    /* LAYOUT */
+    .main{display:flex;flex:1;overflow:hidden;}
+
+    /* SIDEBAR TABS */
+    .sidebar{width:200px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:12px 0;overflow-y:auto;}
+    .tab{padding:10px 18px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;letter-spacing:0.04em;border-left:2px solid transparent;transition:all .15s;}
+    .tab:hover{color:var(--text);background:rgba(255,255,255,0.02);}
+    .tab.active{color:var(--green);border-left-color:var(--green);background:rgba(118,185,0,0.05);}
+    .tab-group-label{padding:16px 18px 6px;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--mid);}
+
+    /* CONTENT PANE */
+    .content{flex:1;overflow-y:auto;padding:32px 40px;}
+    .section-head{margin-bottom:28px;}
+    .section-head h2{font-size:20px;font-weight:800;color:var(--white);margin-bottom:6px;}
+    .section-head p{font-size:13px;color:var(--muted);}
+    .panel{background:var(--panel);border:1px solid var(--border);margin-bottom:20px;}
+    .panel-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .panel-title{font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--white);}
+    .panel-body{padding:20px;}
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+    .field:last-child{margin-bottom:0;}
+    .field label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);}
+    .field .hint{font-size:11px;color:var(--mid);margin-top:2px;}
+    input[type=text],input[type=email],input[type=url],input[type=color],textarea,select{background:var(--panel2);border:1px solid var(--border2);color:var(--text);padding:9px 12px;font-size:13px;font-family:var(--font);outline:none;width:100%;transition:border-color .15s;}
+    input[type=text]:focus,input[type=email]:focus,input[type=url]:focus,textarea:focus,select:focus{border-color:var(--green);}
+    input[type=color]{padding:4px 8px;height:36px;cursor:pointer;}
+    textarea{resize:vertical;min-height:80px;}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+
+    /* REPEATER */
+    .repeater{display:flex;flex-direction:column;gap:8px;}
+    .rep-item{background:var(--surface);border:1px solid var(--border2);padding:14px 16px;display:flex;gap:10px;align-items:flex-start;}
+    .rep-item-fields{flex:1;display:flex;flex-direction:column;gap:8px;}
+    .rep-item-fields input,.rep-item-fields textarea,.rep-item-fields select{margin:0;}
+    .rep-item-row{display:grid;gap:8px;}
+    .rep-del{flex-shrink:0;margin-top:2px;padding:5px 8px;font-size:12px;border:1px solid var(--border);color:var(--mid);background:transparent;transition:all .15s;}
+    .rep-del:hover{border-color:#c00;color:#e55;}
+    .rep-add{margin-top:8px;padding:8px 16px;font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:1px dashed var(--border);color:var(--mid);background:transparent;width:100%;transition:all .15s;}
+    .rep-add:hover{border-color:var(--green);color:var(--green);}
+    .rep-handle{color:var(--mid);font-size:14px;padding-top:3px;cursor:grab;}
+
+    /* EXPORT */
+    .export-code{background:var(--surface);border:1px solid var(--border);padding:20px;font-family:'Courier New',monospace;font-size:12px;color:#9fd600;overflow-x:auto;white-space:pre;max-height:400px;overflow-y:auto;margin-top:12px;}
+    .copy-strip{display:flex;gap:10px;margin-top:10px;}
+
+    /* STATUS */
+    .statusbar{height:26px;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;}
+    .dot{width:6px;height:6px;border-radius:50%;background:var(--mid);}
+    .dot.ok{background:var(--green);}
+    .dot.dirty{background:#e5a000;}
+    .stxt{font-size:11px;color:var(--muted);}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:40px;right:24px;background:var(--green);color:var(--black);padding:10px 20px;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;z-index:300;transform:translateY(20px);opacity:0;transition:all .25s;}
+    .toast.show{transform:none;opacity:1;}
+    .toast.err{background:#c00;color:#fff;}
+
+    .pane{display:none;} .pane.active{display:block;}
+    @media(max-width:700px){.sidebar{width:140px;} .content{padding:20px;} .row2,.row3{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo-wrap">
+    <div class="logo-mark"></div>
+    <div class="logo-txt"><span>DRS</span> Config Admin</div>
+  </div>
+  <div class="topbar-sep"></div>
+  <div class="topbar-sub">site.config.js editor</div>
+  <div class="topbar-right">
+    <button class="tbtn" onclick="resetToDefaults()">Reset Defaults</button>
+    <button class="tbtn" onclick="showExport()">Export JS</button>
+    <button class="tbtn tbtn-green" onclick="saveConfig()">Save Config</button>
+    <a href="../index.html" target="_blank" class="tbtn">Preview Site →</a>
+  </div>
+</div>
+
+<div class="main">
+  <div class="sidebar">
+    <div class="tab-group-label">Identity</div>
+    <div class="tab active" data-pane="brand">Brand</div>
+    <div class="tab" data-pane="contact">Contact</div>
+    <div class="tab" data-pane="seo">SEO / Meta</div>
+    <div class="tab-group-label">Homepage</div>
+    <div class="tab" data-pane="hero">Hero</div>
+    <div class="tab" data-pane="ticker">Ticker</div>
+    <div class="tab" data-pane="whyus">Why Us</div>
+    <div class="tab" data-pane="ctaband">CTA Band</div>
+    <div class="tab-group-label">Content</div>
+    <div class="tab" data-pane="services">Services</div>
+    <div class="tab" data-pane="techstack">Tech Stack</div>
+    <div class="tab" data-pane="casestudies">Case Studies</div>
+    <div class="tab" data-pane="industries">Industries</div>
+    <div class="tab" data-pane="principal">Principal</div>
+    <div class="tab" data-pane="credentials">Credentials</div>
+    <div class="tab-group-label">Blog</div>
+    <div class="tab" data-pane="blogcats">Categories</div>
+    <div class="tab-group-label">Export</div>
+    <div class="tab" data-pane="export">Export Config</div>
+  </div>
+
+  <div class="content">
+
+    <!-- BRAND -->
+    <div class="pane active" id="pane-brand">
+      <div class="section-head"><h2>Brand</h2><p>Core identity used throughout the site.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Identity</div></div>
+        <div class="panel-body">
+          <div class="row2">
+            <div class="field"><label>Logo Mark (initials)</label><input type="text" id="brand.logoMark"/></div>
+            <div class="field"><label>Full Company Name</label><input type="text" id="brand.logoName"/></div>
+          </div>
+          <div class="field"><label>Tagline (footer)</label><textarea id="brand.tagline" rows="2"></textarea></div>
+          <div class="row3">
+            <div class="field"><label>Domain</label><input type="text" id="brand.domain"/></div>
+            <div class="field"><label>Founded Year</label><input type="text" id="brand.founded"/></div>
+            <div class="field"><label>Location (short)</label><input type="text" id="brand.location"/></div>
+          </div>
+          <div class="field"><label>Accent Color</label><div style="display:flex;gap:10px;align-items:center;"><input type="color" id="brand.accentColor" style="width:60px;"/><input type="text" id="brand.accentColorHex" style="width:120px;" placeholder="#76b900"/></div><div class="hint">Changes the primary green across the entire site</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="pane" id="pane-contact">
+      <div class="section-head"><h2>Contact</h2><p>Emails, LinkedIn, and form settings.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Addresses</div></div>
+        <div class="panel-body">
+          <div class="row2">
+            <div class="field"><label>Advisory Email</label><input type="email" id="contact.advisoryEmail"/></div>
+            <div class="field"><label>CEO Email</label><input type="email" id="contact.ceoEmail"/></div>
+          </div>
+          <div class="field"><label>LinkedIn URL</label><input type="url" id="contact.linkedIn"/></div>
+          <div class="row2">
+            <div class="field"><label>Location (full)</label><input type="text" id="contact.locationFull"/></div>
+            <div class="field"><label>Location Sub-text</label><input type="text" id="contact.locationSub"/></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Response Time</label><input type="text" id="contact.responseTime"/></div>
+            <div class="field"><label>Formspree ID</label><input type="text" id="contact.formspreeId"/><div class="hint">From formspree.io/f/<strong>YOUR_ID</strong></div></div>
+          </div>
+          <div class="field"><label>Nav CTA Label</label><input type="text" id="contact.ctaLabel"/></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO -->
+    <div class="pane" id="pane-seo">
+      <div class="section-head"><h2>SEO / Meta</h2><p>Page title, description, and copyright.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Meta Tags</div></div>
+        <div class="panel-body">
+          <div class="field"><label>Site Title</label><input type="text" id="seo.siteTitle"/></div>
+          <div class="field"><label>Meta Description</label><textarea id="seo.description" rows="2"></textarea></div>
+          <div class="field"><label>Keywords (comma-separated)</label><input type="text" id="seo.keywords"/></div>
+          <div class="field"><label>Copyright Start Year</label><input type="text" id="seo.copyrightYear"/></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="pane" id="pane-hero">
+      <div class="section-head"><h2>Hero</h2><p>The full-screen landing section.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Copy</div></div>
+        <div class="panel-body">
+          <div class="field"><label>Eyebrow Text</label><input type="text" id="hero.eyebrow"/></div>
+          <div class="field"><label>Headline Lines (one per line — last line gets accent color)</label><textarea id="hero.headline" rows="4"></textarea></div>
+          <div class="field"><label>Sub-text</label><textarea id="hero.subtext" rows="2"></textarea></div>
+          <div class="row2">
+            <div class="field"><label>Primary CTA</label><input type="text" id="hero.ctaPrimary"/></div>
+            <div class="field"><label>Secondary CTA</label><input type="text" id="hero.ctaSecondary"/></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Stats</div><button class="tbtn" onclick="addStat()">+ Add</button></div>
+        <div class="panel-body"><div class="repeater" id="statsRepeater"></div></div>
+      </div>
+    </div>
+
+    <!-- TICKER -->
+    <div class="pane" id="pane-ticker">
+      <div class="section-head"><h2>Ticker</h2><p>Scrolling marquee items under the hero.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Items</div><button class="tbtn" onclick="addTickerItem()">+ Add</button></div>
+        <div class="panel-body"><div class="repeater" id="tickerRepeater"></div></div>
+      </div>
+    </div>
+
+    <!-- WHY US -->
+    <div class="pane" id="pane-whyus">
+      <div class="section-head"><h2>Why Us</h2><p>The split-panel "Why DRS" section.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Copy</div></div>
+        <div class="panel-body">
+          <div class="row2">
+            <div class="field"><label>Badge Text</label><input type="text" id="whyUs.badge"/></div>
+            <div class="field"><label>Eyebrow</label><input type="text" id="whyUs.eyebrow"/></div>
+          </div>
+          <div class="field"><label>Headline (2 lines, one per line)</label><textarea id="whyUs.headline" rows="2"></textarea></div>
+          <div class="field"><label>Body Paragraph</label><textarea id="whyUs.body" rows="4"></textarea></div>
+          <div class="field"><label>CTA Label</label><input type="text" id="whyUs.cta"/></div>
+        </div>
+      </div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Bullet Points</div><button class="tbtn" onclick="addBullet()">+ Add</button></div>
+        <div class="panel-body"><div class="repeater" id="bulletsRepeater"></div></div>
+      </div>
+    </div>
+
+    <!-- CTA BAND -->
+    <div class="pane" id="pane-ctaband">
+      <div class="section-head"><h2>CTA Band</h2><p>The full-width green call-to-action strip.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Content</div></div>
+        <div class="panel-body">
+          <div class="field"><label>Headline</label><input type="text" id="ctaBand.headline"/></div>
+          <div class="field"><label>Sub-text</label><input type="text" id="ctaBand.sub"/></div>
+          <div class="field"><label>Button Label</label><input type="text" id="ctaBand.cta"/></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="pane" id="pane-services">
+      <div class="section-head"><h2>Services</h2><p>Service cards (pillars). Also populates nav dropdown and contact form.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Service Cards</div><button class="tbtn" onclick="addService()">+ Add</button></div>
+        <div class="panel-body"><div class="repeater" id="servicesRepeater"></div></div>
+      </div>
+    </div>
+
+    <!-- TECH STACK -->
+    <div class="pane" id="pane-techstack">
+      <div class="section-head"><h2>Tech Stack</h2><p>Technologies listed in the "Core Technology Expertise" bar.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Technologies</div><button class="tbtn" onclick="addTech()">+ Add</button></div>
+        <div class="panel-body"><div class="repeater" id="techRepeater"></div></div>
+      </div>
+    </div>
+
+    <!-- CASE STUDIES -->
+    <div class="pane" id="pane-casestudies">
+      <div class="section-head"><h2>Case Studies</h2><p>Engagement highlight cards.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Cases</div><button class="tbtn" onclick="addCase()">+ Add</button></div>
+        <div class="panel-body"><div class="repeater" id="casesRepeater"></div></div>
+      </div>
+    </div>
+
+    <!-- INDUSTRIES -->
+    <div class="pane" id="pane-industries">
+      <div class="section-head"><h2>Industries</h2><p>Industry tiles grid.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Industries</div><button class="tbtn" onclick="addIndustry()">+ Add</button></div>
+        <div class="panel-body"><div class="repeater" id="industriesRepeater"></div></div>
+      </div>
+    </div>
+
+    <!-- PRINCIPAL -->
+    <div class="pane" id="pane-principal">
+      <div class="section-head"><h2>Principal</h2><p>The founder/team card in the About section.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Profile</div></div>
+        <div class="panel-body">
+          <div class="row3">
+            <div class="field"><label>Initials</label><input type="text" id="principal.initials" maxlength="3"/></div>
+            <div class="field"><label>Full Name</label><input type="text" id="principal.name"/></div>
+            <div class="field"><label>Role / Title</label><input type="text" id="principal.role"/></div>
+          </div>
+          <div class="field"><label>Bio</label><textarea id="principal.bio" rows="4"></textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CREDENTIALS -->
+    <div class="pane" id="pane-credentials">
+      <div class="section-head"><h2>Credentials</h2><p>Credential timeline cards beside the principal card.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Credential Cards</div><button class="tbtn" onclick="addCredential()">+ Add</button></div>
+        <div class="panel-body"><div class="repeater" id="credsRepeater"></div></div>
+      </div>
+    </div>
+
+    <!-- BLOG CATEGORIES -->
+    <div class="pane" id="pane-blogcats">
+      <div class="section-head"><h2>Blog Categories</h2><p>Used in the Blog Admin and blog filter bar.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Categories</div><button class="tbtn" onclick="addBlogCat()">+ Add</button></div>
+        <div class="panel-body"><div class="repeater" id="blogCatsRepeater"></div></div>
+      </div>
+    </div>
+
+    <!-- EXPORT -->
+    <div class="pane" id="pane-export">
+      <div class="section-head"><h2>Export Config</h2><p>Download the generated <code>site.config.js</code> and place it in your site root.</p></div>
+      <div class="panel"><div class="panel-head"><div class="panel-title">Generated site.config.js</div></div>
+        <div class="panel-body">
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Click <strong>Refresh Preview</strong> to regenerate, then <strong>Download</strong> to save. Place the file at <code>drs-site/site.config.js</code> (replacing the old one), then run <code>npm run build</code>.</p>
+          <div class="copy-strip">
+            <button class="tbtn" onclick="refreshExport()">Refresh Preview</button>
+            <button class="tbtn tbtn-green" onclick="downloadConfig()">Download site.config.js</button>
+          </div>
+          <pre class="export-code" id="exportCode">Click "Refresh Preview" to generate…</pre>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<div class="statusbar">
+  <div class="dot" id="statusDot"></div>
+  <div class="stxt" id="statusTxt">Loading config…</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="../site.config.js"></script>
+<script>
+/* ── STATE ── */
+let CFG = {};
+let dirty = false;
+
+/* ── UTILS ── */
+function e(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function deepClone(o){ return JSON.parse(JSON.stringify(o)); }
+function toast(msg, err){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show'+(err?' err':'');
+  setTimeout(()=>t.className='toast',2500);
+}
+function setDirty(val){
+  dirty=val;
+  const dot=document.getElementById('statusDot'), txt=document.getElementById('statusTxt');
+  dot.className='dot '+(val?'dirty':'ok');
+  txt.textContent=val?'Unsaved changes':'Config saved';
+}
+
+/* ── TABS ── */
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('pane-'+tab.dataset.pane).classList.add('active');
+  });
+});
+
+/* ── SIMPLE FIELD BINDING ── */
+function bindField(id, getter, setter){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.value=getter();
+  el.addEventListener('input',()=>{ setter(el.value); setDirty(true); });
+}
+function get(path){ return path.split('.').reduce((o,k)=>o?.[k], CFG); }
+function set(path, val){ const keys=path.split('.'); let o=CFG; keys.slice(0,-1).forEach(k=>o=o[k]); o[keys[keys.length-1]]=val; }
+
+/* ── COLOR FIELD (sync hex ↔ picker) ── */
+function bindColor(){
+  const picker=document.getElementById('brand.accentColor');
+  const hex=document.getElementById('brand.accentColorHex');
+  const v=CFG.brand.accentColor||'#76b900';
+  picker.value=v; hex.value=v;
+  picker.addEventListener('input',()=>{ hex.value=picker.value; set('brand.accentColor',picker.value); setDirty(true); });
+  hex.addEventListener('input',()=>{ if(/^#[0-9a-f]{6}$/i.test(hex.value)){picker.value=hex.value; set('brand.accentColor',hex.value); setDirty(true);} });
+}
+
+/* ── REPEATER HELPERS ── */
+function repItem(fields, onDelete){
+  const wrap=document.createElement('div'); wrap.className='rep-item';
+  const fieldsWrap=document.createElement('div'); fieldsWrap.className='rep-item-fields';
+  fields(fieldsWrap);
+  const del=document.createElement('button'); del.className='rep-del'; del.textContent='✕'; del.onclick=()=>{onDelete();setDirty(true);};
+  wrap.appendChild(fieldsWrap); wrap.appendChild(del);
+  return wrap;
+}
+function inp(placeholder, value, onChange, style=''){
+  const i=document.createElement('input'); i.type='text'; i.placeholder=placeholder; i.value=value||''; i.style.cssText=style;
+  i.addEventListener('input',()=>onChange(i.value));
+  return i;
+}
+function ta(placeholder, value, onChange){
+  const t=document.createElement('textarea'); t.placeholder=placeholder; t.value=value||''; t.rows=2;
+  t.addEventListener('input',()=>onChange(t.value));
+  return t;
+}
+
+/* ── STATS REPEATER ── */
+function renderStats(){
+  const rep=document.getElementById('statsRepeater'); rep.innerHTML='';
+  CFG.hero.stats.forEach((s,i)=>{
+    const item=repItem(wrap=>{
+      const row=document.createElement('div'); row.className='rep-item-row'; row.style.gridTemplateColumns='80px 80px 1fr';
+      row.appendChild(inp('Value',''+s.value,v=>{CFG.hero.stats[i].value=Number(v)||0;setDirty(true);}));
+      row.appendChild(inp('Suffix',s.suffix,v=>{CFG.hero.stats[i].suffix=v;setDirty(true);}));
+      row.appendChild(inp('Label',s.label,v=>{CFG.hero.stats[i].label=v;setDirty(true);}));
+      wrap.appendChild(row);
+    },()=>{CFG.hero.stats.splice(i,1);renderStats();});
+    rep.appendChild(item);
+  });
+}
+function addStat(){ CFG.hero.stats.push({value:0,suffix:'+',label:'New Stat'}); renderStats(); setDirty(true); }
+
+/* ── TICKER REPEATER ── */
+function renderTicker(){
+  const rep=document.getElementById('tickerRepeater'); rep.innerHTML='';
+  CFG.ticker.forEach((t,i)=>{
+    const item=repItem(wrap=>{wrap.appendChild(inp('Ticker item text',t,v=>{CFG.ticker[i]=v;setDirty(true);}));},()=>{CFG.ticker.splice(i,1);renderTicker();});
+    rep.appendChild(item);
+  });
+}
+function addTickerItem(){ CFG.ticker.push('New Item'); renderTicker(); setDirty(true); }
+
+/* ── BULLETS REPEATER ── */
+function renderBullets(){
+  const rep=document.getElementById('bulletsRepeater'); rep.innerHTML='';
+  CFG.whyUs.bullets.forEach((b,i)=>{
+    const item=repItem(wrap=>{wrap.appendChild(inp('Bullet point text',b,v=>{CFG.whyUs.bullets[i]=v;setDirty(true);}));},()=>{CFG.whyUs.bullets.splice(i,1);renderBullets();});
+    rep.appendChild(item);
+  });
+}
+function addBullet(){ CFG.whyUs.bullets.push('New bullet point'); renderBullets(); setDirty(true); }
+
+/* ── SERVICES REPEATER ── */
+function renderServices(){
+  const rep=document.getElementById('servicesRepeater'); rep.innerHTML='';
+  CFG.services.forEach((s,i)=>{
+    const item=repItem(wrap=>{
+      const row=document.createElement('div'); row.className='rep-item-row'; row.style.gridTemplateColumns='60px 1fr';
+      row.appendChild(inp('Icon',s.icon,v=>{CFG.services[i].icon=v;setDirty(true);},'text-align:center;'));
+      row.appendChild(inp('Service Name',s.name,v=>{CFG.services[i].name=v;setDirty(true);}));
+      wrap.appendChild(row);
+      wrap.appendChild(ta('Description',s.desc,v=>{CFG.services[i].desc=v;setDirty(true);}));
+    },()=>{CFG.services.splice(i,1);renderServices();});
+    rep.appendChild(item);
+  });
+}
+function addService(){ CFG.services.push({icon:'◆',name:'New Service',desc:'Service description.'}); renderServices(); setDirty(true); }
+
+/* ── TECH REPEATER ── */
+function renderTech(){
+  const rep=document.getElementById('techRepeater'); rep.innerHTML='';
+  CFG.techStack.forEach((t,i)=>{
+    const item=repItem(wrap=>{wrap.appendChild(inp('Technology name',t,v=>{CFG.techStack[i]=v;setDirty(true);}));},()=>{CFG.techStack.splice(i,1);renderTech();});
+    rep.appendChild(item);
+  });
+}
+function addTech(){ CFG.techStack.push('New Tech'); renderTech(); setDirty(true); }
+
+/* ── CASE STUDIES REPEATER ── */
+function renderCases(){
+  const rep=document.getElementById('casesRepeater'); rep.innerHTML='';
+  CFG.caseStudies.forEach((cs,i)=>{
+    const item=repItem(wrap=>{
+      const r1=document.createElement('div'); r1.className='rep-item-row'; r1.style.gridTemplateColumns='1fr 1fr';
+      r1.appendChild(inp('Industry',cs.industry,v=>{CFG.caseStudies[i].industry=v;setDirty(true);}));
+      r1.appendChild(inp('Client',cs.client,v=>{CFG.caseStudies[i].client=v;setDirty(true);}));
+      wrap.appendChild(r1);
+      wrap.appendChild(inp('Title',cs.title,v=>{CFG.caseStudies[i].title=v;setDirty(true);}));
+      wrap.appendChild(ta('Excerpt',cs.excerpt,v=>{CFG.caseStudies[i].excerpt=v;setDirty(true);}));
+      const r2=document.createElement('div'); r2.className='rep-item-row'; r2.style.gridTemplateColumns='120px 1fr 1fr';
+      r2.appendChild(inp('Metric',cs.metric,v=>{CFG.caseStudies[i].metric=v;setDirty(true);}));
+      r2.appendChild(inp('Metric Label',cs.metricLabel,v=>{CFG.caseStudies[i].metricLabel=v;setDirty(true);}));
+      r2.appendChild(inp('BG Gradient CSS',cs.bgGradient,v=>{CFG.caseStudies[i].bgGradient=v;setDirty(true);}));
+      wrap.appendChild(r2);
+    },()=>{CFG.caseStudies.splice(i,1);renderCases();});
+    rep.appendChild(item);
+  });
+}
+function addCase(){ CFG.caseStudies.push({industry:'New',client:'Client Name',title:'Engagement Title',excerpt:'Brief description.',metric:'0',metricLabel:'Result',bgGradient:'linear-gradient(135deg,#0a1a00,#0d2200)'}); renderCases(); setDirty(true); }
+
+/* ── INDUSTRIES REPEATER ── */
+function renderIndustries(){
+  const rep=document.getElementById('industriesRepeater'); rep.innerHTML='';
+  CFG.industries.forEach((ind,i)=>{
+    const item=repItem(wrap=>{
+      const row=document.createElement('div'); row.className='rep-item-row'; row.style.gridTemplateColumns='60px 1fr';
+      row.appendChild(inp('Icon',ind.icon,v=>{CFG.industries[i].icon=v;setDirty(true);},'text-align:center;'));
+      row.appendChild(inp('Industry Name',ind.name,v=>{CFG.industries[i].name=v;setDirty(true);}));
+      wrap.appendChild(row);
+    },()=>{CFG.industries.splice(i,1);renderIndustries();});
+    rep.appendChild(item);
+  });
+}
+function addIndustry(){ CFG.industries.push({icon:'🏢',name:'New Industry'}); renderIndustries(); setDirty(true); }
+
+/* ── CREDENTIALS REPEATER ── */
+function renderCreds(){
+  const rep=document.getElementById('credsRepeater'); rep.innerHTML='';
+  CFG.credentials.forEach((cr,i)=>{
+    const item=repItem(wrap=>{
+      const row=document.createElement('div'); row.className='rep-item-row'; row.style.gridTemplateColumns='140px 1fr';
+      row.appendChild(inp('Label / Year',cr.year,v=>{CFG.credentials[i].year=v;setDirty(true);}));
+      row.appendChild(inp('Title',cr.title,v=>{CFG.credentials[i].title=v;setDirty(true);}));
+      wrap.appendChild(row);
+      wrap.appendChild(inp('Organization / Detail',cr.org,v=>{CFG.credentials[i].org=v;setDirty(true);}));
+    },()=>{CFG.credentials.splice(i,1);renderCreds();});
+    rep.appendChild(item);
+  });
+}
+function addCredential(){ CFG.credentials.push({year:'New',title:'Credential Title',org:'Organization detail'}); renderCreds(); setDirty(true); }
+
+/* ── BLOG CATEGORIES REPEATER ── */
+function renderBlogCats(){
+  const rep=document.getElementById('blogCatsRepeater'); rep.innerHTML='';
+  CFG.blogCategories.forEach((c,i)=>{
+    const item=repItem(wrap=>{wrap.appendChild(inp('Category name',c,v=>{CFG.blogCategories[i]=v;setDirty(true);}));},()=>{CFG.blogCategories.splice(i,1);renderBlogCats();});
+    rep.appendChild(item);
+  });
+}
+function addBlogCat(){ CFG.blogCategories.push('New Category'); renderBlogCats(); setDirty(true); }
+
+/* ── LOAD CONFIG INTO UI ── */
+function loadUI(){
+  CFG = deepClone(DRS_CONFIG);
+
+  // Simple fields
+  const simpleFields = [
+    'brand.logoMark','brand.logoName','brand.tagline','brand.domain','brand.founded','brand.location',
+    'contact.advisoryEmail','contact.ceoEmail','contact.linkedIn','contact.locationFull','contact.locationSub',
+    'contact.responseTime','contact.formspreeId','contact.ctaLabel',
+    'seo.siteTitle','seo.description','seo.keywords','seo.copyrightYear',
+    'hero.eyebrow','hero.ctaPrimary','hero.ctaSecondary','hero.subtext',
+    'whyUs.badge','whyUs.eyebrow','whyUs.body','whyUs.cta',
+    'ctaBand.headline','ctaBand.sub','ctaBand.cta',
+    'principal.initials','principal.name','principal.role','principal.bio',
+  ];
+  simpleFields.forEach(id=>{ bindField(id, ()=>get(id)||'', v=>{set(id,v);setDirty(true);}); });
+
+  // Multi-line headline fields
+  const heroHeadline=document.getElementById('hero.headline');
+  heroHeadline.value=(CFG.hero.headline||[]).join('\n');
+  heroHeadline.addEventListener('input',()=>{CFG.hero.headline=heroHeadline.value.split('\n').filter(l=>l.trim());setDirty(true);});
+
+  const whyHeadline=document.getElementById('whyUs.headline');
+  whyHeadline.value=(CFG.whyUs.headline||[]).join('\n');
+  whyHeadline.addEventListener('input',()=>{CFG.whyUs.headline=whyHeadline.value.split('\n').filter(l=>l.trim());setDirty(true);});
+
+  bindColor();
+  renderStats();
+  renderTicker();
+  renderBullets();
+  renderServices();
+  renderTech();
+  renderCases();
+  renderIndustries();
+  renderCreds();
+  renderBlogCats();
+  setDirty(false);
+}
+
+/* ── SAVE (writes to localStorage + updates DRS_CONFIG) ── */
+function saveConfig(){
+  // Merge CFG back into the global DRS_CONFIG object so site preview updates
+  Object.assign(window.DRS_CONFIG, CFG);
+  localStorage.setItem('drs_config_override', JSON.stringify(CFG));
+  setDirty(false);
+  toast('Config saved — export site.config.js to publish');
+}
+
+/* ── RESET ── */
+function resetToDefaults(){
+  if(!confirm('Reset all settings to the defaults from site.config.js? Unsaved changes will be lost.')) return;
+  localStorage.removeItem('drs_config_override');
+  loadUI();
+  toast('Reset to defaults');
+}
+
+/* ── GENERATE JS ── */
+function buildConfigJS(){
+  const c=CFG;
+  return `/**
+ * DRS Site Configuration
+ * Generated by Config Admin on ${new Date().toLocaleString()}
+ * Place this file at: drs-site/site.config.js
+ */
+var DRS_CONFIG = ${JSON.stringify(c, null, 2)};
+`;
+}
+
+function refreshExport(){
+  document.getElementById('exportCode').textContent = buildConfigJS();
+}
+function showExport(){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.querySelector('[data-pane="export"]').classList.add('active');
+  document.getElementById('pane-export').classList.add('active');
+  refreshExport();
+}
+function downloadConfig(){
+  const js = buildConfigJS();
+  const blob = new Blob([js],{type:'text/javascript'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='site.config.js'; a.click();
+  toast('Downloaded site.config.js');
+}
+
+/* ── CHECK FOR SAVED OVERRIDE ── */
+function init(){
+  const saved = localStorage.getItem('drs_config_override');
+  if(saved){
+    try{
+      window.DRS_CONFIG = JSON.parse(saved);
+    } catch(e){
+      localStorage.removeItem('drs_config_override');
+    }
+  }
+  loadUI();
+}
+
+init();
+</script>
+</body>
+</html>

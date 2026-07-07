@@ -1,0 +1,15 @@
+# Cloudflare Pages configuration for Derivative Research Systems
+# Docs: https://developers.cloudflare.com/pages/
+
+name       = "derivative-research-systems"
+pages_build_output_dir = "dist"
+
+# ── Build ──────────────────────────────────────────────────────────────────
+[build]
+command = "npm run build"
+
+[build.environment_variables]
+NODE_VERSION = "20"
+
+# ── Compatibility ──────────────────────────────────────────────────────────
+compatibility_date = "2024-01-01"

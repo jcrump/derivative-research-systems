@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>How to Reduce Cloud Costs Through Application Modernization | DRS Insights</title>
+  <meta name="description" content="Cloud cost optimization is one of the most misunderstood disciplines in mid-market technology. Most companies approach it as a procurement problem --- negotiate better reserved instance rates, right-size the obvious over-provisioned instances, turn off the development environments on weekends. These measures produce modest savings and do not address the root cause."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--green:#76b900;--green-dk:#5a8c00;--black:#000;--surface:#0a0a0a;--panel:#111;--border:#222;--mid:#444;--text:#e8e8e8;--muted:#888;--white:#fff;--nav-h:60px;--font:'Inter',system-ui,sans-serif;--serif:'Merriweather',Georgia,serif;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--black);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);background:rgba(0,0,0,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;}
+    .nav-inner{width:100%;max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;}
+    .nav-logo{display:flex;align-items:center;gap:10px;margin-right:auto;}
+    .nav-logo-mark{width:28px;height:28px;background:var(--green);clip-path:polygon(0 0,100% 0,100% 60%,60% 100%,0 100%);}
+    .nav-logo-text{font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--white);}
+    .nav-logo-text span{color:var(--green);}
+    .nav-back{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;display:flex;align-items:center;gap:6px;transition:color .15s;}
+    .nav-back:hover{color:var(--green);}
+    .post-header{padding:calc(var(--nav-h) + 80px) 24px 60px;background:var(--surface);border-bottom:1px solid var(--border);}
+    .post-header-inner{max-width:860px;margin:0 auto;}
+    .post-breadcrumb{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:24px;}
+    .post-breadcrumb a:hover{color:var(--green);}
+    .post-breadcrumb span{color:var(--mid);}
+    .post-cat-badge{display:inline-block;background:var(--green);color:var(--black);font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;margin-bottom:20px;}
+    .post-title{font-size:clamp(28px,5vw,52px);font-weight:900;letter-spacing:-0.02em;color:var(--white);line-height:1.08;margin-bottom:20px;}
+    .post-excerpt-lede{font-size:18px;color:var(--muted);line-height:1.6;margin-bottom:32px;font-weight:300;}
+    .post-meta-bar{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding-top:24px;border-top:1px solid var(--border);}
+    .post-author{display:flex;align-items:center;gap:12px;}
+    .post-author-avatar{width:36px;height:36px;background:var(--green);clip-path:polygon(0 0,100% 0,100% 60%,60% 100%,0 100%);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:var(--black);}
+    .post-author-name{font-size:13px;font-weight:600;color:var(--text);}
+    .post-author-role{font-size:11px;color:var(--muted);}
+    .post-meta-item{font-size:12px;color:var(--muted);}
+    .post-meta-item strong{color:var(--text);}
+    .post-layout{max-width:1100px;margin:0 auto;padding:64px 24px;display:grid;grid-template-columns:1fr 260px;gap:64px;align-items:start;}
+    .post-content{font-family:var(--serif);font-size:17px;line-height:1.85;color:#ccc;}
+    .post-content h2{font-family:var(--font);font-size:26px;font-weight:800;color:var(--white);margin:48px 0 16px;letter-spacing:-0.01em;}
+    .post-content h3{font-family:var(--font);font-size:20px;font-weight:700;color:var(--white);margin:36px 0 12px;}
+    .post-content p{margin-bottom:24px;}
+    .post-content ul,.post-content ol{margin:0 0 24px 24px;}
+    .post-content li{margin-bottom:8px;}
+    .post-content blockquote{border-left:3px solid var(--green);padding:16px 24px;margin:32px 0;background:rgba(118,185,0,0.04);font-style:italic;color:var(--muted);}
+    .post-content code{font-family:'Courier New',monospace;background:var(--panel);color:var(--green);padding:2px 7px;font-size:14px;border:1px solid var(--border);}
+    .post-content pre{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);padding:24px;margin:32px 0;overflow-x:auto;font-size:13px;line-height:1.6;}
+    .post-content pre code{background:none;border:none;padding:0;color:#9fd600;}
+    .post-content hr{border:none;border-top:1px solid var(--border);margin:40px 0;}
+    .post-content a{color:var(--green);text-decoration:underline;text-decoration-color:rgba(118,185,0,0.3);}
+    .post-content a:hover{text-decoration-color:var(--green);}
+    .post-content strong{color:var(--white);font-family:var(--font);}
+    .post-sidebar{position:sticky;top:calc(var(--nav-h) + 24px);}
+    .sidebar-card{background:var(--panel);border:1px solid var(--border);padding:24px;margin-bottom:20px;}
+    .sidebar-title{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--white);margin-bottom:16px;}
+    .toc-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+    .toc-list li a{font-size:12px;color:var(--muted);transition:color .15s;display:block;padding:4px 0;border-left:2px solid transparent;padding-left:10px;}
+    .toc-list li a:hover,.toc-list li a.active{color:var(--green);border-left-color:var(--green);}
+    .tag-list{display:flex;flex-wrap:wrap;gap:8px;}
+    .tag{padding:4px 10px;border:1px solid var(--border);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
+    .cta-card{background:rgba(118,185,0,0.07);border:1px solid rgba(118,185,0,0.2);padding:24px;}
+    .cta-card p{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6;}
+    .btn-cta{display:block;text-align:center;padding:11px 16px;background:var(--green);color:var(--black);font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;}
+    .btn-cta:hover{background:#9fd600;}
+    .post-nav{max-width:860px;margin:0 auto;padding:0 24px 80px;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .post-nav-card{background:var(--panel);border:1px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:6px;}
+    .post-nav-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);}
+    .post-nav-title{font-size:14px;font-weight:600;color:var(--text);}
+    footer{background:#050505;border-top:1px solid var(--border);padding:32px 24px;text-align:center;}
+    footer p{font-size:12px;color:var(--mid);}
+    footer a{color:var(--green);}
+    @media(max-width:900px){.post-layout{grid-template-columns:1fr;}.post-sidebar{display:none;}.post-nav{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../index.html">
+      <div class="nav-logo-mark"></div>
+      <div class="nav-logo-text"><span>DRS</span> Derivative Research Systems</div>
+    </a>
+    <a href="index.html" class="nav-back">← All Insights</a>
+  </div>
+</nav>
+<header class="post-header">
+  <div class="post-header-inner">
+    <div class="post-breadcrumb">
+      <a href="../index.html">Home</a><span>/</span>
+      <a href="index.html">Insights</a><span>/</span>
+      <span>Cloud</span>
+    </div>
+    <div class="post-cat-badge">Cloud</div>
+    <h1 class="post-title">How to Reduce Cloud Costs Through Application Modernization</h1>
+    <p class="post-excerpt-lede">Cloud cost optimization is one of the most misunderstood disciplines in mid-market technology. Most companies approach it as a procurement problem --- negotiate better reserved instance rates, right-size the obvious over-provisioned instances, turn off the development environments on weekends. These measures produce modest savings and do not address the root cause.</p>
+    <div class="post-meta-bar">
+      <div class="post-author">
+        <div class="post-author-avatar">JR</div>
+        <div>
+          <div class="post-author-name">Jeff Rump</div>
+          <div class="post-author-role">Founder &amp; Principal Architect, DRS</div>
+        </div>
+      </div>
+      <div class="post-meta-item"><strong>January 3, 2026</strong></div>
+      <div class="post-meta-item">4 min read</div>
+    </div>
+  </div>
+</header>
+<div class="post-layout">
+  <article class="post-content" id="postContent"><p><strong>How to Reduce Cloud Costs Through Application Modernization</strong></p><p>Why most cloud cost problems are application architecture problems in
+disguise.</p><p>For: Founders, CTOs, Owners, VPs of Engineering (11--200 employees) ·
+\~5 min read</p><p>Cloud cost optimization is one of the most misunderstood disciplines in
+mid-market technology. Most companies approach it as a procurement
+problem --- negotiate better reserved instance rates, right-size the
+obvious over-provisioned instances, turn off the development
+environments on weekends. These measures produce modest savings and do
+not address the root cause.</p><p>The root cause, in the majority of cases, is application architecture.
+Applications that were designed for on-premise deployment, lifted into
+the cloud without modification, and scaled by adding instances rather
+than by redesigning for elastic workloads are expensive to run in the
+cloud --- not because the cloud is expensive, but because the
+applications are not using the cloud as it was designed to be used.</p><p><strong>The Lift-and-Shift Tax</strong></p><p>When a Java monolith running on a physical server is moved to an EC2
+instance, the cloud bill replaces the hardware depreciation line. The
+operating model is unchanged: the application runs continuously at a
+fixed resource allocation, whether it is processing transactions or
+sitting idle at 3am. In the cloud, you pay for that idle capacity.
+On-premise, you already paid for the hardware regardless. The cloud made
+the cost of over-provisioning visible --- it did not create it.</p><p>A well-architected cloud application uses managed services where they
+deliver lower operational cost than self-managed infrastructure, scales
+automatically with actual workload rather than peak workload capacity,
+and separates compute-intensive batch processing from latency-sensitive
+real-time workloads so each can be priced and scaled independently.</p><p>  -----------------------------------------------------------------
+  <em>*</em>Organizations that modernize their applications alongside ---
+  or instead of --- cloud migration report 30--50% lower cloud
+  costs compared to lift-and-shift migrations. The savings are not
+  from negotiating better rates. They come from running less
+  infrastructure to do the same work.<em>*</em></p><p>  -----------------------------------------------------------------</p><p><strong>Where the Money Goes</strong></p><p>In a typical mid-market company that has been running in the cloud for
+two or more years without application modernization, the cost
+distribution looks something like this: oversized persistent compute
+(EC2 or equivalent) running at 15--30% average utilization; database
+instances provisioned for peak load that runs for four hours per day;
+data transfer costs driven by applications that were not designed for
+cloud networking topology; and storage costs driven by log retention
+policies that were set once and never reviewed.</p><p>None of these are resolved by a reserved instance purchase. They are
+resolved by redesigning the workloads.</p><p><strong>The Highest-Return Modernization Investments</strong></p><p>Containerizing batch workloads and running them on spot or preemptible
+compute reduces the cost of those workloads by 60--80% compared to
+on-demand instances. This is the highest-return, lowest-risk
+modernization investment for most mid-market companies and can typically
+be executed in four to eight weeks.</p><p>Replacing self-managed databases with managed services (RDS, Cloud SQL,
+Aurora Serverless) eliminates the operational overhead of database
+administration while enabling auto-scaling that matches actual query
+volume. For databases that have significant idle periods, serverless
+configurations can reduce costs by 40--60% compared to always-on
+provisioned instances.</p><p>Migrating synchronous batch processing to event-driven architectures
+using message queues eliminates the need to provision compute for peak
+batch load. The compute scales with the queue depth rather than being
+allocated statically.</p><p><strong>Measuring Before and After</strong></p><p>Cloud cost modernization requires a baseline before any changes are
+made. Instrument your current spend by workload, not by service. Know
+what each major business function actually costs to run in the cloud.
+Then measure the impact of each modernization initiative against that
+baseline. Without this discipline, you cannot know whether the
+investment is paying back --- and you cannot make the internal case for
+the next investment.</p><p>+:---------------------------------------------------------------:+
+| <strong>→ Ready to take the next step?</strong>                              |
+|                                                                 |
+| DRS conducts cloud cost architecture assessments that identify  |
+| your highest-return modernization opportunities --- with effort |
+| estimates and sequencing that fits a mid-market engineering     |
+| team and budget.                                                |
+|                                                                 |
+| advisory@derivativeresearchsystems.com ·                        |
+| derivativeresearchsystems.com                                   |
++-----------------------------------------------------------------+</p></article>
+  <aside class="post-sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">In This Post</div>
+      <ul class="toc-list" id="tocList"></ul>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-title">Tags</div>
+      <div class="tag-list"><span class="tag">Cloud</span><span class="tag">Modernization</span></div>
+    </div>
+    <div class="cta-card">
+      <div class="sidebar-title">Work With DRS</div>
+      <p>Ready to solve the architecture problem you're reading about?</p>
+      <a href="../index.html#contact" class="btn-cta">Schedule Assessment</a>
+    </div>
+  </aside>
+</div>
+<nav class="post-nav"></nav>
+<footer><p>© 2024–2026 Derivative Research Systems LLC &nbsp;·&nbsp; <a href="../index.html">Home</a> &nbsp;·&nbsp; <a href="index.html">Insights</a> &nbsp;·&nbsp; <a href="../index.html#contact">Contact</a></p></footer>
+<script>
+const content=document.getElementById('postContent');
+const toc=document.getElementById('tocList');
+if(content&&toc){
+  const headings=content.querySelectorAll('h2,h3');
+  headings.forEach((h,i)=>{
+    const id='h'+i;h.id=id;
+    const li=document.createElement('li');
+    li.innerHTML='<a href="#'+id+'"'+(h.tagName==='H3'?' style="padding-left:18px;"':'')+'>'+h.textContent+'</a>';
+    toc.appendChild(li);
+  });
+  const links=toc.querySelectorAll('a');
+  window.addEventListener('scroll',()=>{
+    let cur='';
+    headings.forEach(h=>{if(window.scrollY>=h.offsetTop-120)cur=h.id;});
+    links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+  });
+}
+</script>
+</body>
+</html>
