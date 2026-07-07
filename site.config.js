@@ -32,7 +32,7 @@ var DRS_CONFIG = {
 
   /* ── HERO ───────────────────────────────────────────────────────── */
   hero: {
-    eyebrow:    "Milwaukee, WI · Est. 2024",
+    eyebrow:    "Milwaukee, WI · Est. 1995",
     headline:   ["Modernize.", "Secure.", "Scale."],   // Lines; last one gets accent color
     subtext:    "Boutique IT advisory for enterprises that need architecture that works — not just architecture that looks good on a slide.",
     ctaPrimary:   "Engage DRS →",
@@ -211,6 +211,6 @@ var DRS_CONFIG = {
     siteTitle:   "Derivative Research Systems | IT Modernization & Security Advisory",
     description: "Boutique IT advisory firm specializing in IT modernization, technical debt elimination, and security integration for enterprise teams.",
     keywords:    "IT modernization, technical debt, security integration, microservices, Java, distributed systems, cloud migration, Milwaukee",
-    copyrightYear: "2021",
+    copyrightYear: "2019",
   },
 };
