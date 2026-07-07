@@ -9,11 +9,13 @@ var DRS_CONFIG = {
 
   /* ── BRAND ─────────────────────────────────────────────────────── */
   brand: {
+    brand: {
+    defaultOgImage: "https://derivativeresearchsystems.com/og-default.png",
     logoMark:    "DRS",          // Short initials shown in logo mark
     logoName:    "Derivative Research Systems",
     tagline:     "Boutique IT advisory specializing in modernization, technical debt elimination, and security integration for enterprise teams.",
     domain:      "derivativeresearchsystems.com",
-    founded:     "2024",
+    founded:     "1995",
     location:    "Milwaukee, WI",
     accentColor: "#76b900",      // Primary green — drives CSS --green token
   },
@@ -209,8 +211,8 @@ var DRS_CONFIG = {
   /* ── SEO / META ─────────────────────────────────────────────────── */
   seo: {
     siteTitle:   "Derivative Research Systems | IT Modernization & Security Advisory",
-    description: "Boutique IT advisory firm specializing in IT modernization, technical debt elimination, and security integration for enterprise teams.",
-    keywords:    "IT modernization, technical debt, security integration, microservices, Java, distributed systems, cloud migration, Milwaukee",
-    copyrightYear: "2019",
+    description: "Boutique IT advisory firm specializing in IT modernization, technical debt elimination, and security integration and AI for enterprise teams.",
+    keywords:    "IT modernization, technical debt, security integration, microservices, Java, distributed systems, cloud migration, AI",
+    copyrightYear: "2021",
   },
 };
