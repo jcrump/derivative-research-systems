@@ -9,7 +9,6 @@ var DRS_CONFIG = {
 
   /* ── BRAND ─────────────────────────────────────────────────────── */
   brand: {
-    brand: {
     defaultOgImage: "https://derivativeresearchsystems.com/og-default.png",
     logoMark:    "DRS",          // Short initials shown in logo mark
     logoName:    "Derivative Research Systems",
