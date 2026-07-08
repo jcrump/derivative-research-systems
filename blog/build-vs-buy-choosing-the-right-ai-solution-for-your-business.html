@@ -44,6 +44,10 @@
     .post-content ul,.post-content ol{margin:0 0 24px 24px;}
     .post-content li{margin-bottom:8px;}
     .post-content blockquote{border-left:3px solid var(--green);padding:16px 24px;margin:32px 0;background:rgba(118,185,0,0.04);font-style:italic;color:var(--muted);}
+    .post-content table{width:100%;border-collapse:collapse;margin:32px 0;}
+    .post-content th{background:var(--panel);color:var(--white);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:12px 16px;text-align:left;border-bottom:2px solid var(--green);}
+    .post-content td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:15px;color:#ccc;vertical-align:top;}
+    .post-content tr:last-child td{border-bottom:none;}
     .post-content code{font-family:'Courier New',monospace;background:var(--panel);color:var(--green);padding:2px 7px;font-size:14px;border:1px solid var(--border);}
     .post-content pre{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);padding:24px;margin:32px 0;overflow-x:auto;font-size:13px;line-height:1.6;}
     .post-content pre code{background:none;border:none;padding:0;color:#9fd600;}
@@ -107,72 +111,7 @@
   </div>
 </header>
 <div class="post-layout">
-  <article class="post-content" id="postContent"><p><strong>Build vs. Buy: Choosing the Right AI Solution for Your Business</strong></p><p>The decision framework that saves mid-market companies from expensive
-mistakes in both directions.</p><p>For: Founders, CTOs, Owners, VPs of Engineering (11--200 employees) ·
-\~5 min read</p><p>The build-vs-buy decision for AI capabilities is one the most
-consequential technology choices a mid-market company faces right now
---- and one of the most frequently made incorrectly. Companies that
-default to buying discover that vendor solutions do not fit their data,
-their workflow, or their compliance requirements. Companies that default
-to building discover that they have invested six months in
-infrastructure that a \$50-per-month SaaS tool would have provided on
-day one.</p><p>The right answer is almost never categorical. It is specific to the use
-case, the data, the competitive dynamics, and the team you have. Here is
-the framework for making it correctly.</p><p><strong>Buy When: The Capability Is Not Differentiating</strong></p><p>If the AI capability you need is one that every company in your industry
-uses in the same way, buying is almost always the right answer.
-AI-powered resume screening, email spam filtering, expense
-categorization, and customer support ticket classification are
-capabilities where the implementation is commoditized. The
-differentiation is not in how you build it --- it is in what you do with
-the output.</p><p>Buying these capabilities from a vendor means you get the benefit of the
-vendor\'s training data (typically far more than you could assemble
-internally), their ongoing model improvements, and their infrastructure
---- without the engineering cost of building and maintaining the system
-yourself. The build cost of a well-functioning ML classification system
-for a single use case is typically \$150,000--\$300,000 in engineering
-time. The buy cost is often \$12,000--\$36,000 per year.</p><p><strong>Build When: Your Data Is Your Advantage</strong></p><p>If the AI capability depends on proprietary data that your competitors
-do not have --- your transaction history, your customer behavior data,
-your domain-specific corpus --- building is worth serious consideration.
-A vendor solution trained on generic data will not capture the patterns
-specific to your business. A model trained on your data, with your
-labels, reflecting your specific business context, can outperform
-generic solutions significantly in your specific use case.</p><p>  -----------------------------------------------------------------
-  <em>*</em>The question is not \"can we build this?\" --- you almost
-  certainly can. The question is \"does building this create
-  durable competitive advantage that a vendor solution cannot
-  replicate?\" If the answer is yes, build. If it\'s no, buy.<em>*</em></p><p>  -----------------------------------------------------------------</p><p><strong>Build When: Compliance Requires It</strong></p><p>Regulated industries --- financial services, healthcare, legal --- often
-cannot send customer data to a third-party AI vendor without explicit
-data processing agreements, regulatory approval, or both. If your
-compliance environment restricts data sharing, a vendor solution that
-requires your data to leave your environment may not be an option at
-all, regardless of how good the solution is. Sovereign AI deployment ---
-running models on your own infrastructure --- is increasingly viable but
-requires engineering capability to operate.</p><p><strong>The Hybrid Path Most Companies Should Take</strong></p><p>The most common correct answer for a mid-market company is: buy the
-infrastructure, build the application. Use a managed AI platform (AWS
-Bedrock, Azure OpenAI, Google Vertex AI) for model serving and
-infrastructure. Build the application layer --- the data pipeline that
-feeds your proprietary data into the model context, the output
-validation that ensures the model response meets your business rules,
-the user interface that presents the AI output in your specific
-workflow, and the feedback loop that improves performance over time.</p><p>This approach gives you the infrastructure cost and maintenance leverage
-of a managed platform while keeping the proprietary application logic
---- the part that actually differentiates your AI capability --- inside
-your organization.</p><p><strong>The Question to Ask Before Deciding</strong></p><p>In three years, if this AI capability is working exactly as intended,
-will it be a reason customers choose us over a competitor? If yes, build
-the application on managed infrastructure and keep the differentiated
-logic proprietary. If no, buy the whole thing and spend the engineering
-time on something that does differentiate.</p><p>+:---------------------------------------------------------------:+
-| <strong>→ Ready to take the next step?</strong>                              |
-|                                                                 |
-| DRS helps mid-market companies make build-vs-buy decisions with |
-| a structured framework --- evaluating your use case, your data  |
-| assets, your compliance environment, and your team capability   |
-| to recommend the right path.                                    |
-|                                                                 |
-| advisory@derivativeresearchsystems.com ·                        |
-| derivativeresearchsystems.com                                   |
-+-----------------------------------------------------------------+
-</p></article>
+  <article class="post-content" id="postContent"><p>The build-vs-buy decision for AI capabilities is one the most consequential technology choices a mid-market company faces right now — and one of the most frequently made incorrectly. Companies that default to buying discover that vendor solutions do not fit their data, their workflow, or their compliance requirements. Companies that default to building discover that they have invested six months in infrastructure that a $50-per-month SaaS tool would have provided on day one.</p><p>The right answer is almost never categorical. It is specific to the use case, the data, the competitive dynamics, and the team you have. Here is the framework for making it correctly.</p><h2>Buy When: The Capability Is Not Differentiating</h2><p>If the AI capability you need is one that every company in your industry uses in the same way, buying is almost always the right answer. AI-powered resume screening, email spam filtering, expense categorization, and customer support ticket classification are capabilities where the implementation is commoditized. The differentiation is not in how you build it — it is in what you do with the output.</p><p>Buying these capabilities from a vendor means you get the benefit of the vendor's training data (typically far more than you could assemble internally), their ongoing model improvements, and their infrastructure — without the engineering cost of building and maintaining the system yourself. The build cost of a well-functioning ML classification system for a single use case is typically $150,000–$300,000 in engineering time. The buy cost is often $12,000–$36,000 per year.</p><h2>Build When: Your Data Is Your Advantage</h2><p>If the AI capability depends on proprietary data that your competitors do not have — your transaction history, your customer behavior data, your domain-specific corpus — building is worth serious consideration. A vendor solution trained on generic data will not capture the patterns specific to your business. A model trained on your data, with your labels, reflecting your specific business context, can outperform generic solutions significantly in your specific use case.</p><blockquote>The question is not "can we build this?" — you almost certainly can. The question is "does building this create durable competitive advantage that a vendor solution cannot replicate?" If the answer is yes, build. If it's no, buy.</blockquote><h2>Build When: Compliance Requires It</h2><p>Regulated industries — financial services, healthcare, legal — often cannot send customer data to a third-party AI vendor without explicit data processing agreements, regulatory approval, or both. If your compliance environment restricts data sharing, a vendor solution that requires your data to leave your environment may not be an option at all, regardless of how good the solution is. Sovereign AI deployment — running models on your own infrastructure — is increasingly viable but requires engineering capability to operate.</p><h2>The Hybrid Path Most Companies Should Take</h2><p>The most common correct answer for a mid-market company is: buy the infrastructure, build the application. Use a managed AI platform (AWS Bedrock, Azure OpenAI, Google Vertex AI) for model serving and infrastructure. Build the application layer — the data pipeline that feeds your proprietary data into the model context, the output validation that ensures the model response meets your business rules, the user interface that presents the AI output in your specific workflow, and the feedback loop that improves performance over time.</p><p>This approach gives you the infrastructure cost and maintenance leverage of a managed platform while keeping the proprietary application logic — the part that actually differentiates your AI capability — inside your organization.</p><h2>The Question to Ask Before Deciding</h2><p>In three years, if this AI capability is working exactly as intended, will it be a reason customers choose us over a competitor? If yes, build the application on managed infrastructure and keep the differentiated logic proprietary. If no, buy the whole thing and spend the engineering time on something that does differentiate.</p><blockquote><strong>Ready to take the next step?</strong> DRS helps mid-market companies make build-vs-buy decisions with a structured framework — evaluating your use case, your data assets, your compliance environment, and your team capability to recommend the right path. advisory@derivativeresearchsystems.com · derivativeresearchsystems.com</blockquote></article>
   <aside class="post-sidebar">
     <div class="sidebar-card">
       <div class="sidebar-title">In This Post</div>

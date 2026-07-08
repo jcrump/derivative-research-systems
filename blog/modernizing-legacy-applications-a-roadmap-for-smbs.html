@@ -44,6 +44,10 @@
     .post-content ul,.post-content ol{margin:0 0 24px 24px;}
     .post-content li{margin-bottom:8px;}
     .post-content blockquote{border-left:3px solid var(--green);padding:16px 24px;margin:32px 0;background:rgba(118,185,0,0.04);font-style:italic;color:var(--muted);}
+    .post-content table{width:100%;border-collapse:collapse;margin:32px 0;}
+    .post-content th{background:var(--panel);color:var(--white);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:12px 16px;text-align:left;border-bottom:2px solid var(--green);}
+    .post-content td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:15px;color:#ccc;vertical-align:top;}
+    .post-content tr:last-child td{border-bottom:none;}
     .post-content code{font-family:'Courier New',monospace;background:var(--panel);color:var(--green);padding:2px 7px;font-size:14px;border:1px solid var(--border);}
     .post-content pre{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);padding:24px;margin:32px 0;overflow-x:auto;font-size:13px;line-height:1.6;}
     .post-content pre code{background:none;border:none;padding:0;color:#9fd600;}
@@ -107,72 +111,7 @@
   </div>
 </header>
 <div class="post-layout">
-  <article class="post-content" id="postContent"><p><strong>Modernizing Legacy Applications: A Roadmap for SMBs</strong></p><p>The step-by-step approach that keeps the business running while the
-technology evolves.</p><p>For: Founders, CTOs, Owners, VPs of Engineering (11--200 employees) ·
-\~5 min read</p><p>Legacy application modernization is one of the most consequential ---
-and most feared --- initiatives an SMB technology leader undertakes. The
-fear is understandable. The systems being modernized are the ones the
-business depends on most. The consequences of getting it wrong are not a
-failed experiment. They are a failed business.</p><p>The companies that succeed at modernization share a common approach:
-they treat it as a continuous discipline rather than a one-time project,
-they sequence carefully to reduce risk at each stage, and they keep the
-existing system running until the new one has proven itself on real
-workloads. This post outlines that approach as a practical roadmap.</p><p><strong>Phase 0: Honest Assessment Before Any Code Changes</strong></p><p>The most important work in a modernization program happens before the
-first line of new code is written. You need to know, precisely, what you
-have: which systems, which integrations, which data flows, and which
-business processes depend on each component. You need to understand
-where the technical debt is highest-cost --- not in engineering terms
-but in business terms: where does the current architecture limit your
-ability to ship features, serve customers, or maintain compliance?</p><p>This assessment produces a prioritized list of modernization candidates
-ranked by business value and migration risk. It also produces the honest
-answer to the question most modernization programs avoid: what is the
-cost of not modernizing? That number --- quantified in developer
-velocity lost, customer experience degraded, and competitive capability
-foregone --- is what drives the organizational commitment that
-successful modernization requires.</p><p><strong>Phase 1: Stabilize Before You Modernize</strong></p><p>Before extracting any component from the legacy system, stabilize the
-one you have. This means establishing a comprehensive test suite that
-covers the existing behavior --- not to test the new system, but to
-define the contract that the new system must preserve. It means
-implementing observability: logging, metrics, and alerting that give you
-real-time visibility into system behavior before, during, and after
-migration. And it means eliminating the most fragile external
-dependencies --- the third-party integrations that break without notice,
-the batch jobs that fail silently, the manual processes that compensate
-for system gaps.</p><p>  -----------------------------------------------------------------
-  <em>*</em>The number one cause of failed modernization programs is
-  starting to build the new system before the old one is
-  sufficiently understood and instrumented. Stabilization is not
-  delay --- it is risk reduction that pays back in every subsequent
-  phase.<em>*</em></p><p>  -----------------------------------------------------------------</p><p><strong>Phase 2: Extract the Edges, Not the Core</strong></p><p>The first components to extract from a legacy monolith should be the
-ones with the clearest external boundaries and the lowest internal
-coupling. Reporting services. Notification systems. Document generation.
-These are components that read data from the core system but do not
-write to it, making them safe to extract without risking transaction
-integrity. The extraction proves the pattern --- new service, new
-deployment, new API --- before it is applied to components where the
-stakes are higher.</p><p><strong>Phase 3: Event-Driven Integration Layer</strong></p><p>As more components are extracted, they need a clean way to communicate
-without recreating the tight coupling of the monolith. The event-driven
-integration layer --- typically implemented with a message broker like
-Kafka or a managed equivalent --- becomes the backbone that lets
-services communicate asynchronously, replay events for new consumers,
-and scale independently. This layer is designed in Phase 0 and
-implemented incrementally as extraction creates the need for it.</p><p><strong>Phase 4: Core Migration on Proven Infrastructure</strong></p><p>The core transactional systems --- order management, payment processing,
-user accounts --- are migrated last, on infrastructure that has been
-proven by the earlier extractions. By this phase, your team has run the
-migration pattern multiple times, the integration layer is stable, and
-the test suite is comprehensive enough to validate the new
-implementation against the old behavior.</p><p>+:---------------------------------------------------------------:+
-| <strong>→ Ready to take the next step?</strong>                              |
-|                                                                 |
-| DRS has led legacy modernization programs across fintech,       |
-| healthcare, and enterprise sectors. We build your assessment,   |
-| design your roadmap, and provide the technical leadership to    |
-| execute --- without the big-bang risk.                          |
-|                                                                 |
-| advisory@derivativeresearchsystems.com ·                        |
-| derivativeresearchsystems.com                                   |
-+-----------------------------------------------------------------+
-</p></article>
+  <article class="post-content" id="postContent"><p>Legacy application modernization is one of the most consequential — and most feared — initiatives an SMB technology leader undertakes. The fear is understandable. The systems being modernized are the ones the business depends on most. The consequences of getting it wrong are not a failed experiment. They are a failed business.</p><p>The companies that succeed at modernization share a common approach: they treat it as a continuous discipline rather than a one-time project, they sequence carefully to reduce risk at each stage, and they keep the existing system running until the new one has proven itself on real workloads. This post outlines that approach as a practical roadmap.</p><h2>Phase 0: Honest Assessment Before Any Code Changes</h2><p>The most important work in a modernization program happens before the first line of new code is written. You need to know, precisely, what you have: which systems, which integrations, which data flows, and which business processes depend on each component. You need to understand where the technical debt is highest-cost — not in engineering terms but in business terms: where does the current architecture limit your ability to ship features, serve customers, or maintain compliance?</p><p>This assessment produces a prioritized list of modernization candidates ranked by business value and migration risk. It also produces the honest answer to the question most modernization programs avoid: what is the cost of not modernizing? That number — quantified in developer velocity lost, customer experience degraded, and competitive capability foregone — is what drives the organizational commitment that successful modernization requires.</p><h2>Phase 1: Stabilize Before You Modernize</h2><p>Before extracting any component from the legacy system, stabilize the one you have. This means establishing a comprehensive test suite that covers the existing behavior — not to test the new system, but to define the contract that the new system must preserve. It means implementing observability: logging, metrics, and alerting that give you real-time visibility into system behavior before, during, and after migration. And it means eliminating the most fragile external dependencies — the third-party integrations that break without notice, the batch jobs that fail silently, the manual processes that compensate for system gaps.</p><blockquote>The number one cause of failed modernization programs is starting to build the new system before the old one is sufficiently understood and instrumented. Stabilization is not delay — it is risk reduction that pays back in every subsequent phase.</blockquote><h2>Phase 2: Extract the Edges, Not the Core</h2><p>The first components to extract from a legacy monolith should be the ones with the clearest external boundaries and the lowest internal coupling. Reporting services. Notification systems. Document generation. These are components that read data from the core system but do not write to it, making them safe to extract without risking transaction integrity. The extraction proves the pattern — new service, new deployment, new API — before it is applied to components where the stakes are higher.</p><h2>Phase 3: Event-Driven Integration Layer</h2><p>As more components are extracted, they need a clean way to communicate without recreating the tight coupling of the monolith. The event-driven integration layer — typically implemented with a message broker like Kafka or a managed equivalent — becomes the backbone that lets services communicate asynchronously, replay events for new consumers, and scale independently. This layer is designed in Phase 0 and implemented incrementally as extraction creates the need for it.</p><h2>Phase 4: Core Migration on Proven Infrastructure</h2><p>The core transactional systems — order management, payment processing, user accounts — are migrated last, on infrastructure that has been proven by the earlier extractions. By this phase, your team has run the migration pattern multiple times, the integration layer is stable, and the test suite is comprehensive enough to validate the new implementation against the old behavior.</p><blockquote><strong>Ready to take the next step?</strong> DRS has led legacy modernization programs across fintech, healthcare, and enterprise sectors. We build your assessment, design your roadmap, and provide the technical leadership to execute — without the big-bang risk. advisory@derivativeresearchsystems.com · derivativeresearchsystems.com</blockquote></article>
   <aside class="post-sidebar">
     <div class="sidebar-card">
       <div class="sidebar-title">In This Post</div>

@@ -44,6 +44,10 @@
     .post-content ul,.post-content ol{margin:0 0 24px 24px;}
     .post-content li{margin-bottom:8px;}
     .post-content blockquote{border-left:3px solid var(--green);padding:16px 24px;margin:32px 0;background:rgba(118,185,0,0.04);font-style:italic;color:var(--muted);}
+    .post-content table{width:100%;border-collapse:collapse;margin:32px 0;}
+    .post-content th{background:var(--panel);color:var(--white);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:12px 16px;text-align:left;border-bottom:2px solid var(--green);}
+    .post-content td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:15px;color:#ccc;vertical-align:top;}
+    .post-content tr:last-child td{border-bottom:none;}
     .post-content code{font-family:'Courier New',monospace;background:var(--panel);color:var(--green);padding:2px 7px;font-size:14px;border:1px solid var(--border);}
     .post-content pre{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);padding:24px;margin:32px 0;overflow-x:auto;font-size:13px;line-height:1.6;}
     .post-content pre code{background:none;border:none;padding:0;color:#9fd600;}
@@ -107,68 +111,7 @@
   </div>
 </header>
 <div class="post-layout">
-  <article class="post-content" id="postContent"><p><strong>Payment Modernization Without Rewriting Your Entire Platform</strong></p><p>How to upgrade your payment infrastructure incrementally --- without
-stopping the business.</p><p>For: Founders, CTOs, Owners, VPs of Engineering (11--200 employees) ·
-\~5 min read</p><p>Payment infrastructure modernization is one of the highest-stakes
-technology decisions a mid-market company makes. The system processes
-revenue. Downtime is measured in dollars per minute. Errors have
-regulatory and reputational consequences that extend well beyond the
-transaction itself. And yet the status quo --- aging payment logic
-buried in a monolithic application, limited API surface, no support for
-modern payment methods --- is also costing you revenue and competitive
-position every day it remains unchanged.</p><p>The good news is that modern payment modernization does not require a
-big-bang rewrite. It requires a disciplined, phased approach that keeps
-the existing system running while the new capabilities are built
-alongside it.</p><p><strong>The Strangler Fig Applied to Payments</strong></p><p>The Strangler Fig pattern --- originally described by Martin Fowler ---
-is the most proven approach to incrementally replacing a legacy system
-without disrupting production. The name comes from the Strangler Fig
-tree, which grows around an existing tree over time and eventually
-replaces it. Applied to payment infrastructure, it means building a new
-payment service layer that intercepts traffic at the API boundary,
-routing new transaction types and new customers through the modern stack
-while existing flows continue through the legacy system until they can
-be safely migrated.</p><p>In a Java environment, this typically means introducing a Spring Boot
-payment service that exposes a clean REST API to your frontend and
-mobile applications, handles the routing logic, and delegates to either
-the new payment processor integration or the legacy system based on the
-transaction type and customer segment. The legacy code is not touched
-until the new path is proven and the volume has shifted.</p><p>  -----------------------------------------------------------------
-  <em>*</em>Companies that use the Strangler Fig pattern for payment
-  modernization report 70% fewer incidents during migration
-  compared to big-bang rewrites, and average migration timelines of
-  4--6 months versus 12--18 months for full rewrites.<em>*</em></p><p>  -----------------------------------------------------------------</p><p><strong>What to Modernize First</strong></p><p>The sequencing matters. Start with the new payment methods --- digital
-wallets, BNPL, real-time payments --- that your legacy system cannot
-support at all. These are purely additive: there is no migration risk
-because there is no existing volume to migrate. You build the new
-capability in the new stack, route new traffic through it, and prove the
-architecture before you migrate any legacy volume.</p><p>Second priority is the highest-cost legacy integration --- typically the
-one with the most manual reconciliation, the most integration
-maintenance overhead, or the most frequent failure modes. That is where
-the operational ROI of replacement is highest and the business case for
-the migration investment is easiest to make.</p><p><strong>What Not to Touch First</strong></p><p>The core settlement and reconciliation logic is the last thing to
-migrate, not the first. It is the most complex, the most regulated, and
-the most consequential if something goes wrong. Let it run in the legacy
-system while you build confidence in the new stack on lower-risk
-transaction types. Migration of the settlement core happens after the
-new architecture has processed real volume, has been through a month-end
-close, and has been validated by your finance and compliance teams.</p><p><strong>The Infrastructure You Need Before You Start</strong></p><p>Before the first line of new payment code is written, you need three
-things: a comprehensive test suite that covers the existing payment
-flows (if you do not have one, building it is the first project); an
-observability layer that gives you real-time visibility into transaction
-volumes, latency, and error rates across both old and new paths; and a
-rollback plan that defines exactly what happens if the new path produces
-unexpected behavior at any stage of the migration.</p><p>+:---------------------------------------------------------------:+
-| <strong>→ Ready to take the next step?</strong>                              |
-|                                                                 |
-| DRS has led payment infrastructure modernization programs for   |
-| fintech and enterprise clients. We assess your current stack,   |
-| design the migration sequence, and guide implementation ---     |
-| without stopping the business.                                  |
-|                                                                 |
-| advisory@derivativeresearchsystems.com ·                        |
-| derivativeresearchsystems.com                                   |
-+-----------------------------------------------------------------+
-</p></article>
+  <article class="post-content" id="postContent"><p>Payment infrastructure modernization is one of the highest-stakes technology decisions a mid-market company makes. The system processes revenue. Downtime is measured in dollars per minute. Errors have regulatory and reputational consequences that extend well beyond the transaction itself. And yet the status quo — aging payment logic buried in a monolithic application, limited API surface, no support for modern payment methods — is also costing you revenue and competitive position every day it remains unchanged.</p><p>The good news is that modern payment modernization does not require a big-bang rewrite. It requires a disciplined, phased approach that keeps the existing system running while the new capabilities are built alongside it.</p><h2>The Strangler Fig Applied to Payments</h2><p>The Strangler Fig pattern — originally described by Martin Fowler — is the most proven approach to incrementally replacing a legacy system without disrupting production. The name comes from the Strangler Fig tree, which grows around an existing tree over time and eventually replaces it. Applied to payment infrastructure, it means building a new payment service layer that intercepts traffic at the API boundary, routing new transaction types and new customers through the modern stack while existing flows continue through the legacy system until they can be safely migrated.</p><p>In a Java environment, this typically means introducing a Spring Boot payment service that exposes a clean REST API to your frontend and mobile applications, handles the routing logic, and delegates to either the new payment processor integration or the legacy system based on the transaction type and customer segment. The legacy code is not touched until the new path is proven and the volume has shifted.</p><blockquote>Companies that use the Strangler Fig pattern for payment modernization report 70% fewer incidents during migration compared to big-bang rewrites, and average migration timelines of 4–6 months versus 12–18 months for full rewrites.</blockquote><h2>What to Modernize First</h2><p>The sequencing matters. Start with the new payment methods — digital wallets, BNPL, real-time payments — that your legacy system cannot support at all. These are purely additive: there is no migration risk because there is no existing volume to migrate. You build the new capability in the new stack, route new traffic through it, and prove the architecture before you migrate any legacy volume.</p><p>Second priority is the highest-cost legacy integration — typically the one with the most manual reconciliation, the most integration maintenance overhead, or the most frequent failure modes. That is where the operational ROI of replacement is highest and the business case for the migration investment is easiest to make.</p><h2>What Not to Touch First</h2><p>The core settlement and reconciliation logic is the last thing to migrate, not the first. It is the most complex, the most regulated, and the most consequential if something goes wrong. Let it run in the legacy system while you build confidence in the new stack on lower-risk transaction types. Migration of the settlement core happens after the new architecture has processed real volume, has been through a month-end close, and has been validated by your finance and compliance teams.</p><h2>The Infrastructure You Need Before You Start</h2><p>Before the first line of new payment code is written, you need three things: a comprehensive test suite that covers the existing payment flows (if you do not have one, building it is the first project); an observability layer that gives you real-time visibility into transaction volumes, latency, and error rates across both old and new paths; and a rollback plan that defines exactly what happens if the new path produces unexpected behavior at any stage of the migration.</p><blockquote><strong>Ready to take the next step?</strong> DRS has led payment infrastructure modernization programs for fintech and enterprise clients. We assess your current stack, design the migration sequence, and guide implementation — without stopping the business. advisory@derivativeresearchsystems.com · derivativeresearchsystems.com</blockquote></article>
   <aside class="post-sidebar">
     <div class="sidebar-card">
       <div class="sidebar-title">In This Post</div>

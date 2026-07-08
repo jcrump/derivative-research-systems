@@ -44,6 +44,10 @@
     .post-content ul,.post-content ol{margin:0 0 24px 24px;}
     .post-content li{margin-bottom:8px;}
     .post-content blockquote{border-left:3px solid var(--green);padding:16px 24px;margin:32px 0;background:rgba(118,185,0,0.04);font-style:italic;color:var(--muted);}
+    .post-content table{width:100%;border-collapse:collapse;margin:32px 0;}
+    .post-content th{background:var(--panel);color:var(--white);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:12px 16px;text-align:left;border-bottom:2px solid var(--green);}
+    .post-content td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:15px;color:#ccc;vertical-align:top;}
+    .post-content tr:last-child td{border-bottom:none;}
     .post-content code{font-family:'Courier New',monospace;background:var(--panel);color:var(--green);padding:2px 7px;font-size:14px;border:1px solid var(--border);}
     .post-content pre{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);padding:24px;margin:32px 0;overflow-x:auto;font-size:13px;line-height:1.6;}
     .post-content pre code{background:none;border:none;padding:0;color:#9fd600;}
@@ -107,70 +111,7 @@
   </div>
 </header>
 <div class="post-layout">
-  <article class="post-content" id="postContent"><p><strong>How to Reduce Cloud Costs Through Application Modernization</strong></p><p>Why most cloud cost problems are application architecture problems in
-disguise.</p><p>For: Founders, CTOs, Owners, VPs of Engineering (11--200 employees) ·
-\~5 min read</p><p>Cloud cost optimization is one of the most misunderstood disciplines in
-mid-market technology. Most companies approach it as a procurement
-problem --- negotiate better reserved instance rates, right-size the
-obvious over-provisioned instances, turn off the development
-environments on weekends. These measures produce modest savings and do
-not address the root cause.</p><p>The root cause, in the majority of cases, is application architecture.
-Applications that were designed for on-premise deployment, lifted into
-the cloud without modification, and scaled by adding instances rather
-than by redesigning for elastic workloads are expensive to run in the
-cloud --- not because the cloud is expensive, but because the
-applications are not using the cloud as it was designed to be used.</p><p><strong>The Lift-and-Shift Tax</strong></p><p>When a Java monolith running on a physical server is moved to an EC2
-instance, the cloud bill replaces the hardware depreciation line. The
-operating model is unchanged: the application runs continuously at a
-fixed resource allocation, whether it is processing transactions or
-sitting idle at 3am. In the cloud, you pay for that idle capacity.
-On-premise, you already paid for the hardware regardless. The cloud made
-the cost of over-provisioning visible --- it did not create it.</p><p>A well-architected cloud application uses managed services where they
-deliver lower operational cost than self-managed infrastructure, scales
-automatically with actual workload rather than peak workload capacity,
-and separates compute-intensive batch processing from latency-sensitive
-real-time workloads so each can be priced and scaled independently.</p><p>  -----------------------------------------------------------------
-  <em>*</em>Organizations that modernize their applications alongside ---
-  or instead of --- cloud migration report 30--50% lower cloud
-  costs compared to lift-and-shift migrations. The savings are not
-  from negotiating better rates. They come from running less
-  infrastructure to do the same work.<em>*</em></p><p>  -----------------------------------------------------------------</p><p><strong>Where the Money Goes</strong></p><p>In a typical mid-market company that has been running in the cloud for
-two or more years without application modernization, the cost
-distribution looks something like this: oversized persistent compute
-(EC2 or equivalent) running at 15--30% average utilization; database
-instances provisioned for peak load that runs for four hours per day;
-data transfer costs driven by applications that were not designed for
-cloud networking topology; and storage costs driven by log retention
-policies that were set once and never reviewed.</p><p>None of these are resolved by a reserved instance purchase. They are
-resolved by redesigning the workloads.</p><p><strong>The Highest-Return Modernization Investments</strong></p><p>Containerizing batch workloads and running them on spot or preemptible
-compute reduces the cost of those workloads by 60--80% compared to
-on-demand instances. This is the highest-return, lowest-risk
-modernization investment for most mid-market companies and can typically
-be executed in four to eight weeks.</p><p>Replacing self-managed databases with managed services (RDS, Cloud SQL,
-Aurora Serverless) eliminates the operational overhead of database
-administration while enabling auto-scaling that matches actual query
-volume. For databases that have significant idle periods, serverless
-configurations can reduce costs by 40--60% compared to always-on
-provisioned instances.</p><p>Migrating synchronous batch processing to event-driven architectures
-using message queues eliminates the need to provision compute for peak
-batch load. The compute scales with the queue depth rather than being
-allocated statically.</p><p><strong>Measuring Before and After</strong></p><p>Cloud cost modernization requires a baseline before any changes are
-made. Instrument your current spend by workload, not by service. Know
-what each major business function actually costs to run in the cloud.
-Then measure the impact of each modernization initiative against that
-baseline. Without this discipline, you cannot know whether the
-investment is paying back --- and you cannot make the internal case for
-the next investment.</p><p>+:---------------------------------------------------------------:+
-| <strong>→ Ready to take the next step?</strong>                              |
-|                                                                 |
-| DRS conducts cloud cost architecture assessments that identify  |
-| your highest-return modernization opportunities --- with effort |
-| estimates and sequencing that fits a mid-market engineering     |
-| team and budget.                                                |
-|                                                                 |
-| advisory@derivativeresearchsystems.com ·                        |
-| derivativeresearchsystems.com                                   |
-+-----------------------------------------------------------------+</p></article>
+  <article class="post-content" id="postContent"><p>Cloud cost optimization is one of the most misunderstood disciplines in mid-market technology. Most companies approach it as a procurement problem — negotiate better reserved instance rates, right-size the obvious over-provisioned instances, turn off the development environments on weekends. These measures produce modest savings and do not address the root cause.</p><p>The root cause, in the majority of cases, is application architecture. Applications that were designed for on-premise deployment, lifted into the cloud without modification, and scaled by adding instances rather than by redesigning for elastic workloads are expensive to run in the cloud — not because the cloud is expensive, but because the applications are not using the cloud as it was designed to be used.</p><h2>The Lift-and-Shift Tax</h2><p>When a Java monolith running on a physical server is moved to an EC2 instance, the cloud bill replaces the hardware depreciation line. The operating model is unchanged: the application runs continuously at a fixed resource allocation, whether it is processing transactions or sitting idle at 3am. In the cloud, you pay for that idle capacity. On-premise, you already paid for the hardware regardless. The cloud made the cost of over-provisioning visible — it did not create it.</p><p>A well-architected cloud application uses managed services where they deliver lower operational cost than self-managed infrastructure, scales automatically with actual workload rather than peak workload capacity, and separates compute-intensive batch processing from latency-sensitive real-time workloads so each can be priced and scaled independently.</p><blockquote>Organizations that modernize their applications alongside — or instead of — cloud migration report 30–50% lower cloud costs compared to lift-and-shift migrations. The savings are not from negotiating better rates. They come from running less infrastructure to do the same work.</blockquote><h2>Where the Money Goes</h2><p>In a typical mid-market company that has been running in the cloud for two or more years without application modernization, the cost distribution looks something like this: oversized persistent compute (EC2 or equivalent) running at 15–30% average utilization; database instances provisioned for peak load that runs for four hours per day; data transfer costs driven by applications that were not designed for cloud networking topology; and storage costs driven by log retention policies that were set once and never reviewed.</p><p>None of these are resolved by a reserved instance purchase. They are resolved by redesigning the workloads.</p><h2>The Highest-Return Modernization Investments</h2><p>Containerizing batch workloads and running them on spot or preemptible compute reduces the cost of those workloads by 60–80% compared to on-demand instances. This is the highest-return, lowest-risk modernization investment for most mid-market companies and can typically be executed in four to eight weeks.</p><p>Replacing self-managed databases with managed services (RDS, Cloud SQL, Aurora Serverless) eliminates the operational overhead of database administration while enabling auto-scaling that matches actual query volume. For databases that have significant idle periods, serverless configurations can reduce costs by 40–60% compared to always-on provisioned instances.</p><p>Migrating synchronous batch processing to event-driven architectures using message queues eliminates the need to provision compute for peak batch load. The compute scales with the queue depth rather than being allocated statically.</p><h2>Measuring Before and After</h2><p>Cloud cost modernization requires a baseline before any changes are made. Instrument your current spend by workload, not by service. Know what each major business function actually costs to run in the cloud. Then measure the impact of each modernization initiative against that baseline. Without this discipline, you cannot know whether the investment is paying back — and you cannot make the internal case for the next investment.</p><blockquote><strong>Ready to take the next step?</strong> DRS conducts cloud cost architecture assessments that identify your highest-return modernization opportunities — with effort estimates and sequencing that fits a mid-market engineering team and budget. advisory@derivativeresearchsystems.com · derivativeresearchsystems.com</blockquote></article>
   <aside class="post-sidebar">
     <div class="sidebar-card">
       <div class="sidebar-title">In This Post</div>

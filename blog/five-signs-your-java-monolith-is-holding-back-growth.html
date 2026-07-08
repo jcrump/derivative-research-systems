@@ -44,6 +44,10 @@
     .post-content ul,.post-content ol{margin:0 0 24px 24px;}
     .post-content li{margin-bottom:8px;}
     .post-content blockquote{border-left:3px solid var(--green);padding:16px 24px;margin:32px 0;background:rgba(118,185,0,0.04);font-style:italic;color:var(--muted);}
+    .post-content table{width:100%;border-collapse:collapse;margin:32px 0;}
+    .post-content th{background:var(--panel);color:var(--white);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:12px 16px;text-align:left;border-bottom:2px solid var(--green);}
+    .post-content td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:15px;color:#ccc;vertical-align:top;}
+    .post-content tr:last-child td{border-bottom:none;}
     .post-content code{font-family:'Courier New',monospace;background:var(--panel);color:var(--green);padding:2px 7px;font-size:14px;border:1px solid var(--border);}
     .post-content pre{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);padding:24px;margin:32px 0;overflow-x:auto;font-size:13px;line-height:1.6;}
     .post-content pre code{background:none;border:none;padding:0;color:#9fd600;}
@@ -107,58 +111,7 @@
   </div>
 </header>
 <div class="post-layout">
-  <article class="post-content" id="postContent"><p><strong>Five Signs Your Java Monolith Is Holding Back Growth</strong></p><p>Your original platform got you here. It may not get you to the next
-stage.</p><p>For: Founders, CTOs, Owners, VPs of Engineering (11--200 employees) ·
-\~5 min read</p><p>The Java monolith that powered your company through its first growth
-phase is one of your most valuable assets. It contains years of business
-logic, handles your most critical workflows, and is understood by your
-most experienced engineers. It is also, in many cases, the single
-largest constraint on your ability to grow.</p><p>Recognizing the constraint before it becomes a crisis is the difference
-between a managed modernization and an emergency rewrite. Here are the
-five signs that your Java monolith has moved from asset to liability.</p><p><strong>Sign 1: Every Feature Deployment Is a Full System Deployment</strong></p><p>When a change to your payment logic requires deploying the same artifact
-as a change to your user interface, you have a coupling problem. Your
-team cannot ship independently, cannot test in isolation, and cannot
-roll back a specific change without rolling back everything deployed at
-the same time. The result is infrequent, high-risk deployments with long
-stabilization windows --- exactly the opposite of the deployment cadence
-a competitive mid-market company needs.</p><p><strong>Sign 2: Your Build Times Are Measured in Minutes, Not Seconds</strong></p><p>A monolith that takes 20 minutes to compile and test is a monolith that
-discourages small, safe changes and encourages large, risky ones.
-Developers batch changes together to avoid waiting. Batch sizes grow.
-Risk grows with them. The build time is not a developer experience
-problem --- it is a delivery risk problem.</p><p><strong>Sign 3: New Engineers Cannot Contribute for Months</strong></p><p>If it takes a new Java developer three to six months before they can
-make a meaningful, safe contribution to your codebase, your system\'s
-complexity is exceeding your team\'s ability to manage it. The knowledge
-is concentrated in the people who built it. That concentration is a
-business risk every time one of them considers another opportunity.</p><p>  -----------------------------------------------------------------
-  <em>*</em>The average time-to-contribution for a new engineer in a
-  well-structured microservices architecture is 3--4 weeks. In a
-  mature monolith without clear boundaries, it is 4--6 months. That
-  is a 4x difference in the return on your hiring investment.<em>*</em></p><p>  -----------------------------------------------------------------</p><p><strong>Sign 4: You Cannot Scale Individual Components Under Load</strong></p><p>When your reporting system is slow, you cannot add capacity to just the
-reporting service --- you have to scale the entire application. When
-your API layer is under load, your background jobs slow down because
-they compete for the same resources. In a monolith, every component is
-constrained by the most resource-intensive workload in the system.</p><p><strong>Sign 5: Your Best Engineers Are Maintaining, Not Building</strong></p><p>The clearest signal that a monolith is holding you back is when your
-senior engineers spend the majority of their time keeping the existing
-system running rather than building the capabilities your product
-roadmap requires. That is not a people problem. It is an architecture
-problem.</p><p><strong>What to Do About It</strong></p><p>The answer is not a rewrite. It is a phased decomposition ---
-identifying the service boundaries that already exist conceptually in
-your business logic, extracting them incrementally using proven patterns
-like the Strangler Fig, and building the event-driven integration layer
-that lets old and new components coexist during the transition. The
-monolith stays running. The business keeps operating. The new
-architecture emerges from the outside in.</p><p>+:---------------------------------------------------------------:+
-| <strong>→ Ready to take the next step?</strong>                              |
-|                                                                 |
-| DRS specializes in Java monolith assessment and phased          |
-| decomposition. We map your current architecture, identify the   |
-| highest-value extraction candidates, and build the migration    |
-| roadmap --- without a big-bang rewrite.                         |
-|                                                                 |
-| advisory@derivativeresearchsystems.com ·                        |
-| derivativeresearchsystems.com                                   |
-+-----------------------------------------------------------------+
-</p></article>
+  <article class="post-content" id="postContent"><p>The Java monolith that powered your company through its first growth phase is one of your most valuable assets. It contains years of business logic, handles your most critical workflows, and is understood by your most experienced engineers. It is also, in many cases, the single largest constraint on your ability to grow.</p><p>Recognizing the constraint before it becomes a crisis is the difference between a managed modernization and an emergency rewrite. Here are the five signs that your Java monolith has moved from asset to liability.</p><h2>Sign 1: Every Feature Deployment Is a Full System Deployment</h2><p>When a change to your payment logic requires deploying the same artifact as a change to your user interface, you have a coupling problem. Your team cannot ship independently, cannot test in isolation, and cannot roll back a specific change without rolling back everything deployed at the same time. The result is infrequent, high-risk deployments with long stabilization windows — exactly the opposite of the deployment cadence a competitive mid-market company needs.</p><h2>Sign 2: Your Build Times Are Measured in Minutes, Not Seconds</h2><p>A monolith that takes 20 minutes to compile and test is a monolith that discourages small, safe changes and encourages large, risky ones. Developers batch changes together to avoid waiting. Batch sizes grow. Risk grows with them. The build time is not a developer experience problem — it is a delivery risk problem.</p><h2>Sign 3: New Engineers Cannot Contribute for Months</h2><p>If it takes a new Java developer three to six months before they can make a meaningful, safe contribution to your codebase, your system's complexity is exceeding your team's ability to manage it. The knowledge is concentrated in the people who built it. That concentration is a business risk every time one of them considers another opportunity.</p><blockquote>The average time-to-contribution for a new engineer in a well-structured microservices architecture is 3–4 weeks. In a mature monolith without clear boundaries, it is 4–6 months. That is a 4x difference in the return on your hiring investment.</blockquote><h2>Sign 4: You Cannot Scale Individual Components Under Load</h2><p>When your reporting system is slow, you cannot add capacity to just the reporting service — you have to scale the entire application. When your API layer is under load, your background jobs slow down because they compete for the same resources. In a monolith, every component is constrained by the most resource-intensive workload in the system.</p><h2>Sign 5: Your Best Engineers Are Maintaining, Not Building</h2><p>The clearest signal that a monolith is holding you back is when your senior engineers spend the majority of their time keeping the existing system running rather than building the capabilities your product roadmap requires. That is not a people problem. It is an architecture problem.</p><h2>What to Do About It</h2><p>The answer is not a rewrite. It is a phased decomposition — identifying the service boundaries that already exist conceptually in your business logic, extracting them incrementally using proven patterns like the Strangler Fig, and building the event-driven integration layer that lets old and new components coexist during the transition. The monolith stays running. The business keeps operating. The new architecture emerges from the outside in.</p><blockquote><strong>Ready to take the next step?</strong> DRS specializes in Java monolith assessment and phased decomposition. We map your current architecture, identify the highest-value extraction candidates, and build the migration roadmap — without a big-bang rewrite. advisory@derivativeresearchsystems.com · derivativeresearchsystems.com</blockquote></article>
   <aside class="post-sidebar">
     <div class="sidebar-card">
       <div class="sidebar-title">In This Post</div>
