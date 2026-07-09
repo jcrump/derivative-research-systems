@@ -17,10 +17,13 @@
     "clean": "node -e \"const fs=require('fs');if(fs.existsSync('./dist'))fs.rmSync('./dist',{recursive:true});console.log('dist/ cleaned');\"",
     "postinstall": "echo 'DRS site ready. Run: npm run dev'",
     "generate:og": "node scripts/generate-og-images.js",
-    "patch:posts": "node scripts/patch-existing-posts.js"
+    "patch:posts": "node scripts/patch-existing-posts.js",
+    "setup": "npm install canvas"
   },
-  "devDependencies": {},
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "canvas": "^3.2.3"
   }
 }

@@ -1,28 +1,35 @@
 #!/usr/bin/env node
 /**
  * DRS OG Image Generator
- * Generates 1200x630 SVG-based OG images for each blog post
- * Converts to PNG using sharp if available, otherwise outputs SVG
- * 
+ * Generates 1200x630 JPG OG images for each blog post
+ * Uses 'canvas' npm package — install once with: npm install canvas
+ *
  * Usage: node scripts/generate-og-images.js
- * Output: public/images/og/[slug].svg (or .jpg if sharp installed)
+ * Output: images/og/[slug].jpg
  */
 
 const fs   = require('fs');
 const path = require('path');
 const vm   = require('vm');
 
+// ── Check canvas is available ───────────────────────────────────────────────
+let createCanvas;
+try {
+  ({ createCanvas } = require('canvas'));
+} catch (e) {
+  console.error('\n❌ Missing dependency. Run:\n\n  npm install canvas\n\nthen retry.\n');
+  process.exit(1);
+}
+
 // ── Load blog registry ──────────────────────────────────────────────────────
 const registryPath = path.resolve(__dirname, '../blog/blog-registry.js');
 if (!fs.existsSync(registryPath)) {
-  console.log('No blog-registry.js found. Run Blog Admin → Publish first.');
+  console.log('No blog-registry.js found. Publish from Blog Admin first.');
   process.exit(0);
 }
-
-const registryCode = fs.readFileSync(registryPath, 'utf8');
 const sandbox = {};
 vm.createContext(sandbox);
-vm.runInContext(registryCode, sandbox);
+vm.runInContext(fs.readFileSync(registryPath, 'utf8'), sandbox);
 const posts = sandbox.DRS_BLOG_POSTS || [];
 
 if (!posts.length) {
@@ -34,109 +41,140 @@ if (!posts.length) {
 const outDir = path.resolve(__dirname, '../images/og');
 if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 
-// ── SVG OG Image Generator ──────────────────────────────────────────────────
-function wrapText(text, maxChars) {
+// ── Remove old SVG files ────────────────────────────────────────────────────
+const oldSVGs = fs.readdirSync(outDir).filter(f => f.endsWith('.svg'));
+for (const f of oldSVGs) {
+  fs.unlinkSync(path.join(outDir, f));
+  console.log(`  🗑  removed ${f}`);
+}
+
+// ── Word wrap helper ────────────────────────────────────────────────────────
+function wrapText(ctx, text, maxWidth) {
   const words = text.split(' ');
   const lines = [];
-  let current = '';
+  let line = '';
   for (const word of words) {
-    if ((current + ' ' + word).trim().length > maxChars) {
-      if (current) lines.push(current.trim());
-      current = word;
+    const test = line ? line + ' ' + word : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
     } else {
-      current = (current + ' ' + word).trim();
+      line = test;
     }
   }
-  if (current) lines.push(current.trim());
+  if (line) lines.push(line);
   return lines.slice(0, 3); // max 3 lines
 }
 
-function escXml(s) {
-  return String(s||'')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
+// ── Draw one OG image and save as JPG ──────────────────────────────────────
+function generateJPG(post, outPath) {
+  const W = 1200, H = 630;
+  const canvas = createCanvas(W, H);
+  const ctx    = canvas.getContext('2d');
 
-function generateSVG(post) {
-  const title  = post.title || 'DRS Insights';
-  const cat    = post.category || 'Advisory';
-  const date   = post.date || '';
-  const lines  = wrapText(title, 32);
-  const lineH  = 72;
-  const startY = 280 - ((lines.length - 1) * lineH) / 2;
+  // Background
+  ctx.fillStyle = '#0A0A0A';
+  ctx.fillRect(0, 0, W, H);
 
-  const titleSVG = lines.map((line, i) =>
-    `<text x="80" y="${startY + i * lineH}" font-family="Arial, sans-serif" font-weight="900" font-size="58" fill="#FFFFFF" letter-spacing="-1">${escXml(line)}</text>`
-  ).join('\n    ');
+  // Subtle grid
+  ctx.strokeStyle = 'rgba(118,185,0,0.07)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 60) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 60) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <!-- Background -->
-  <rect width="1200" height="630" fill="#0A0A0A"/>
+  // Radial glow top-right
+  const glow = ctx.createRadialGradient(W*0.85, H*0.15, 0, W*0.85, H*0.15, 500);
+  glow.addColorStop(0, 'rgba(118,185,0,0.18)');
+  glow.addColorStop(1, 'rgba(118,185,0,0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, W, H);
 
-  <!-- Grid pattern -->
-  <defs>
-    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#76b900" stroke-width="0.4" opacity="0.12"/>
-    </pattern>
-    <radialGradient id="glow" cx="80%" cy="20%" r="60%">
-      <stop offset="0%" stop-color="#76b900" stop-opacity="0.15"/>
-      <stop offset="100%" stop-color="#76b900" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  <rect width="1200" height="630" fill="url(#grid)"/>
-  <rect width="1200" height="630" fill="url(#glow)"/>
+  // Left accent bar
+  ctx.fillStyle = '#76b900';
+  ctx.fillRect(0, 0, 6, H);
 
-  <!-- Left accent bar -->
-  <rect x="0" y="0" width="6" height="630" fill="#76b900"/>
+  // Category badge
+  const cat = (post.category || 'Advisory').toUpperCase();
+  ctx.font = 'bold 14px Arial';
+  const catW = ctx.measureText(cat).width + 32;
+  ctx.fillStyle = '#76b900';
+  ctx.fillRect(80, 72, catW, 36);
+  ctx.fillStyle = '#000000';
+  ctx.font = 'bold 14px Arial';
+  ctx.fillText(cat, 96, 96);
 
-  <!-- Category badge -->
-  <rect x="80" y="80" width="${cat.length * 11 + 32}" height="36" fill="#76b900" rx="2"/>
-  <text x="96" y="103" font-family="Arial, sans-serif" font-weight="700" font-size="14" fill="#000000" letter-spacing="2">${escXml(cat.toUpperCase())}</text>
+  // Title
+  const title = post.title || 'DRS Insights';
+  ctx.font = 'bold 58px Arial';
+  ctx.fillStyle = '#FFFFFF';
+  const lines = wrapText(ctx, title, W - 160);
+  const lineH = 72;
+  const totalH = lines.length * lineH;
+  const startY = (H - totalH) / 2 + 20;
+  lines.forEach((line, i) => {
+    ctx.fillText(line, 80, startY + i * lineH);
+  });
 
-  <!-- Title -->
-  ${titleSVG}
+  // Green underline accent
+  ctx.fillStyle = '#76b900';
+  ctx.fillRect(80, startY + lines.length * lineH + 16, 120, 4);
 
-  <!-- Bottom bar -->
-  <rect x="0" y="540" width="1200" height="90" fill="#111111" opacity="0.9"/>
-  <rect x="0" y="540" width="1200" height="1" fill="#222222"/>
+  // Bottom bar
+  ctx.fillStyle = 'rgba(17,17,17,0.95)';
+  ctx.fillRect(0, H - 90, W, 90);
+  ctx.strokeStyle = '#222222';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, H-90); ctx.lineTo(W, H-90); ctx.stroke();
 
-  <!-- DRS logo mark (clipped corner polygon) -->
-  <polygon points="80,562 104,562 104,594 96,602 80,602" fill="#76b900"/>
-  <text x="114" y="581" font-family="Arial, sans-serif" font-weight="700" font-size="13" fill="#FFFFFF" letter-spacing="3">DRS</text>
-  <text x="114" y="597" font-family="Arial, sans-serif" font-weight="400" font-size="12" fill="#888888">Derivative Research Systems</text>
+  // DRS logo mark (clipped polygon)
+  ctx.fillStyle = '#76b900';
+  ctx.beginPath();
+  ctx.moveTo(80, H-68);
+  ctx.lineTo(104, H-68);
+  ctx.lineTo(104, H-36);
+  ctx.lineTo(96, H-28);
+  ctx.lineTo(80, H-28);
+  ctx.closePath();
+  ctx.fill();
 
-  <!-- Date -->
-  <text x="1120" y="587" font-family="Arial, sans-serif" font-size="13" fill="#666666" text-anchor="end">${escXml(date)}</text>
+  // DRS text
+  ctx.font = 'bold 13px Arial';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillText('DRS', 114, H-52);
+  ctx.font = '12px Arial';
+  ctx.fillStyle = '#888888';
+  ctx.fillText('Derivative Research Systems', 114, H-36);
 
-  <!-- Divider -->
-  <rect x="80" y="530" width="120" height="3" fill="#76b900"/>
-</svg>`;
+  // Date (right aligned)
+  if (post.date) {
+    ctx.font = '13px Arial';
+    ctx.fillStyle = '#666666';
+    ctx.textAlign = 'right';
+    ctx.fillText(post.date, W - 80, H - 44);
+    ctx.textAlign = 'left';
+  }
+
+  // Save as JPG
+  const buf = canvas.toBuffer('image/jpeg', { quality: 0.92 });
+  fs.writeFileSync(outPath, buf);
 }
 
 // ── Generate for each post ──────────────────────────────────────────────────
 let generated = 0;
 for (const post of posts) {
-  const slug = post.slug || post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-  const svgPath = path.join(outDir, `${slug}.svg`);
+  const slug = post.slug || (post.title||'post').toLowerCase().replace(/[^a-z0-9]+/g,'-');
+  const outPath = path.join(outDir, `${slug}.jpg`);
 
-  // Skip if already exists
-  if (fs.existsSync(svgPath)) {
-    console.log(`  → skipping ${slug}.svg (already exists)`);
-    continue;
+  try {
+    generateJPG(post, outPath);
+    console.log(`  ✓ ${slug}.jpg`);
+    generated++;
+  } catch (err) {
+    console.error(`  ✗ ${slug}: ${err.message}`);
   }
-
-  const svg = generateSVG(post);
-  fs.writeFileSync(svgPath, svg, 'utf8');
-  console.log(`  ✓ ${slug}.svg`);
-  generated++;
 }
 
-console.log(`\n✅ Generated ${generated} OG image(s) → images/og/`);
-console.log('\nNote: SVG files are generated. For JPG conversion, run:');
-console.log('  npm install --save-dev sharp');
-console.log('  node scripts/convert-og-to-jpg.js');
-console.log('\nLinkedIn accepts SVG via the og:image tag in some cases,');
-console.log('but JPG at 1200x630 is most reliable. Use the LinkedIn Post Inspector');
-console.log('at https://www.linkedin.com/post-inspector/ to validate each URL.');
+console.log(`\n✅ Generated ${generated} OG image(s) as JPG → images/og/`);
+console.log('\nNext steps:');
+console.log('  1. npm run deploy:netlify');
+console.log('  2. Validate at https://www.linkedin.com/post-inspector/');
