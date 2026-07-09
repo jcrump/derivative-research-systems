@@ -3,14 +3,14 @@ const path = require('path');
 const vm   = require('vm');
 
 // Load registry to get post metadata
-const registryPath = path.resolve(__dirname, 'drs-site/blog/blog-registry.js');
+const registryPath = path.resolve(__dirname, '../blog/blog-registry.js');
 const registryCode = fs.readFileSync(registryPath, 'utf8');
 const sandbox = {};
 vm.createContext(sandbox);
 vm.runInContext(registryCode, sandbox);
 const posts = sandbox.DRS_BLOG_POSTS || [];
 
-const blogDir = path.resolve(__dirname, 'drs-site/blog');
+const blogDir = path.resolve(__dirname, '../blog');
 const htmlFiles = fs.readdirSync(blogDir).filter(f =>
   f.endsWith('.html') && f !== 'index.html' && !f.startsWith('_')
 );
