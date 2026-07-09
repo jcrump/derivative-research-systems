@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npx --yes serve@14 . --listen 3000 --cors",
     "start": "npm run dev",
-    "build": "node scripts/build.js",
+    "build": "node scripts/patch-existing-posts.js && node scripts/generate-og-images.js && node scripts/build.js",
     "build:registry": "node scripts/build-registry.js",
     "preview": "npm run build && npx --yes serve@14 ./dist --listen 3001",
     "deploy:netlify": "npm run build && npx --yes netlify-cli deploy --prod --dir=dist",
@@ -15,7 +15,9 @@
     "deploy:cloudflare:preview": "npm run build && npx --yes wrangler pages deploy dist --project-name=derivative-research-systems --branch=preview",
     "deploy:gh-pages": "npm run build && npx --yes gh-pages -d dist",
     "clean": "node -e \"const fs=require('fs');if(fs.existsSync('./dist'))fs.rmSync('./dist',{recursive:true});console.log('dist/ cleaned');\"",
-    "postinstall": "echo 'DRS site ready. Run: npm run dev'"
+    "postinstall": "echo 'DRS site ready. Run: npm run dev'",
+    "generate:og": "node scripts/generate-og-images.js",
+    "patch:posts": "node scripts/patch-existing-posts.js"
   },
   "devDependencies": {},
   "engines": {

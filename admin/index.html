@@ -90,9 +90,6 @@
     .preview-content ul,.preview-content ol{margin:0 0 18px 24px;color:#aaa;}
     .preview-content li{margin-bottom:6px;font-size:15px;}
     .preview-content blockquote{border-left:3px solid var(--green);padding:12px 20px;margin:24px 0;background:rgba(118,185,0,0.04);color:var(--muted);font-style:italic;}
-    .preview-content table{width:100%;border-collapse:collapse;margin:24px 0;}
-    .preview-content th{background:var(--panel2);color:var(--white);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:10px 14px;text-align:left;border-bottom:2px solid var(--green);}
-    .preview-content td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:14px;color:#ccc;vertical-align:top;}
     .preview-content code{background:var(--panel);color:var(--green);padding:2px 6px;font-size:13px;border:1px solid var(--border);}
     .preview-content pre{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);padding:20px;margin:24px 0;overflow-x:auto;}
     .preview-content pre code{background:none;border:none;padding:0;font-size:13px;color:#9fd600;}
@@ -458,16 +455,7 @@ function savePosts() {
 /* ── MARKDOWN RENDERER (no deps) ── */
 function renderMD(md) {
   if (!md) return '';
-  // Tables (GFM pipe syntax) — must run before other block-level transforms
-  let html = md.replace(/^(\|.+\|)\n(\|[\s:|-]+\|)\n((?:\|.+\|\n?)+)/gm, (match, headerLine, sepLine, bodyLines) => {
-    const split = line => line.split('|').map(s=>s.trim()).filter((s,i,arr)=> !(i===0 && s==='') && !(i===arr.length-1 && s===''));
-    const headers = split(headerLine);
-    const rows = bodyLines.trim().split('\n').map(split);
-    const thead = '<thead><tr>' + headers.map(h=>`<th>${h}</th>`).join('') + '</tr></thead>';
-    const tbody = '<tbody>' + rows.map(r => '<tr>' + r.map(c=>`<td>${c}</td>`).join('') + '</tr>').join('') + '</tbody>';
-    return `<table>${thead}${tbody}</table>\n`;
-  });
-  html = html
+  let html = md
     // Code blocks
     .replace(/```(\w*)\n([\s\S]*?)```/g, (_,lang,code) =>
       `<pre><code class="lang-${lang}">${escHtml(code.trim())}</code></pre>`)
@@ -494,9 +482,9 @@ function renderMD(md) {
     .replace(/\n\n/g, '</p><p>')
   ;
   // Wrap in paragraphs
-  html = '<p>' + html.trim() + '</p>';
+  html = '<p>' + html + '</p>';
   // Clean up empty/malformed paras
-  html = html.replace(/<p><\/p>/g,'').replace(/<p>\s*(<h[1-6]|<ul|<ol|<blockquote|<pre|<hr|<table)/g,'$1').replace(/(<\/h[1-6]>|<\/ul>|<\/ol>|<\/blockquote>|<\/pre>|<\/hr>|<\/table>)\s*<\/p>/g,'$1');
+  html = html.replace(/<p><\/p>/g,'').replace(/<p>(<h[1-6]|<ul|<ol|<blockquote|<pre|<hr)/g,'$1').replace(/(<\/h[1-6]>|<\/ul>|<\/ol>|<\/blockquote>|<\/pre>|<\/hr>)<\/p>/g,'$1');
   return html;
 }
 
@@ -588,6 +576,8 @@ function buildPostHTML(p) {
     .map(t=>`<span class="tag">${escHtml(t)}</span>`).join('');
 
   const bodyHTML = renderMD(p.body||'');
+  const slug = p.slug || slugify(p.title||'untitled');
+  const isoDate = p.date ? new Date(p.date).toISOString() : new Date().toISOString();
 
   let tmpl = POST_TEMPLATE
     .replace(/\{\{POST_TITLE\}\}/g, escHtml(p.title||'Untitled'))
@@ -597,6 +587,8 @@ function buildPostHTML(p) {
     .replace(/\{\{POST_READ_TIME\}\}/g, escHtml(p.readTime||'5 min read'))
     .replace(/\{\{POST_BODY\}\}/g, bodyHTML)
     .replace(/\{\{POST_TAGS\}\}/g, tagLinks)
+    .replace(/\{\{POST_SLUG\}\}/g, slug)
+    .replace(/\{\{POST_ISO_DATE\}\}/g, isoDate)
     .replace('{{POST_PREV}}', '')
     .replace('{{POST_NEXT}}', '');
   return tmpl;
@@ -810,6 +802,31 @@ const POST_TEMPLATE = `<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{{POST_TITLE}} | DRS Insights</title>
   <meta name="description" content="{{POST_EXCERPT}}"/>
+
+  <!-- Open Graph — LinkedIn, Facebook, Slack previews -->
+  <meta property="og:type"        content="article"/>
+  <meta property="og:site_name"   content="Derivative Research Systems"/>
+  <meta property="og:title"       content="{{POST_TITLE}}"/>
+  <meta property="og:description" content="{{POST_EXCERPT}}"/>
+  <meta property="og:url"         content="https://derivativeresearchsystems.com/blog/{{POST_SLUG}}"/>
+  <meta property="og:image"       content="https://derivativeresearchsystems.com/images/og/{{POST_SLUG}}.jpg"/>
+  <meta property="og:image:width"  content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt"   content="{{POST_TITLE}} — DRS Insights"/>
+  <meta property="article:author"         content="Jeff Crump"/>
+  <meta property="article:published_time" content="{{POST_ISO_DATE}}"/>
+  <meta property="article:section"        content="{{POST_CATEGORY}}"/>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image"/>
+  <meta name="twitter:title"       content="{{POST_TITLE}}"/>
+  <meta name="twitter:description" content="{{POST_EXCERPT}}"/>
+  <meta name="twitter:image"       content="https://derivativeresearchsystems.com/images/og/{{POST_SLUG}}.jpg"/>
+  <meta name="twitter:image:alt"   content="{{POST_TITLE}} — DRS Insights"/>
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://derivativeresearchsystems.com/blog/{{POST_SLUG}}"/>
+
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet"/>
   <style>
@@ -849,10 +866,6 @@ const POST_TEMPLATE = `<!DOCTYPE html>
     .post-content ul,.post-content ol{margin:0 0 24px 24px;}
     .post-content li{margin-bottom:8px;}
     .post-content blockquote{border-left:3px solid var(--green);padding:16px 24px;margin:32px 0;background:rgba(118,185,0,0.04);font-style:italic;color:var(--muted);}
-    .post-content table{width:100%;border-collapse:collapse;margin:32px 0;}
-    .post-content th{background:var(--panel);color:var(--white);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:12px 16px;text-align:left;border-bottom:2px solid var(--green);}
-    .post-content td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:15px;color:#ccc;vertical-align:top;}
-    .post-content tr:last-child td{border-bottom:none;}
     .post-content code{font-family:'Courier New',monospace;background:var(--panel);color:var(--green);padding:2px 7px;font-size:14px;border:1px solid var(--border);}
     .post-content pre{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);padding:24px;margin:32px 0;overflow-x:auto;font-size:13px;line-height:1.6;}
     .post-content pre code{background:none;border:none;padding:0;color:#9fd600;}
@@ -906,7 +919,7 @@ const POST_TEMPLATE = `<!DOCTYPE html>
       <div class="post-author">
         <div class="post-author-avatar">JR</div>
         <div>
-          <div class="post-author-name">Jeff Rump</div>
+          <div class="post-author-name">Jeff Crump</div>
           <div class="post-author-role">Founder &amp; Principal Architect, DRS</div>
         </div>
       </div>

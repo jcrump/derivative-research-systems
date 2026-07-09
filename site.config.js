@@ -9,31 +9,30 @@ var DRS_CONFIG = {
 
   /* ── BRAND ─────────────────────────────────────────────────────── */
   brand: {
-    defaultOgImage: "https://derivativeresearchsystems.com/og-default.png",
     logoMark:    "DRS",          // Short initials shown in logo mark
     logoName:    "Derivative Research Systems",
     tagline:     "Boutique IT advisory specializing in modernization, technical debt elimination, and security integration for enterprise teams.",
     domain:      "derivativeresearchsystems.com",
-    founded:     "1995",
+    founded:     "2024",
     location:    "Milwaukee, WI",
     accentColor: "#76b900",      // Primary green — drives CSS --green token
   },
 
   /* ── CONTACT ────────────────────────────────────────────────────── */
   contact: {
-    advisoryEmail:  "advisory.account@derivativeresearchsystems.com",
-    ceoEmail:       "jeffcrump@derivativeresearchsystems.com",
-    linkedIn:       "https://www.linkedin.com/company/71403992/",
+    advisoryEmail:  "advisory@derivativeresearchsystems.com",
+    ceoEmail:       "ceo@derivativeresearchsystems.com",
+    linkedIn:       "https://linkedin.com/in/jeffmcrump/",
     locationFull:   "Milwaukee, Wisconsin",
     locationSub:    "On-site & remote engagements",
     responseTime:   "Within 1 business day",
-    formspreeId:    "xzdqvbvl",  // → https://formspree.io/f/{formspreeId}
+    formspreeId:    "advisory",  // → https://formspree.io/f/{formspreeId}
     ctaLabel:       "Engage DRS",
   },
 
   /* ── HERO ───────────────────────────────────────────────────────── */
   hero: {
-    eyebrow:    "Milwaukee, WI · Est. 1995",
+    eyebrow:    "Milwaukee, WI · Est. 2024",
     headline:   ["Modernize.", "Secure.", "Scale."],   // Lines; last one gets accent color
     subtext:    "Boutique IT advisory for enterprises that need architecture that works — not just architecture that looks good on a slide.",
     ctaPrimary:   "Engage DRS →",
@@ -163,7 +162,7 @@ var DRS_CONFIG = {
     initials:  "JC",
     name:      "Jeff Crump",
     role:      "Founder & Principal Architect",
-    bio:       "Senior Java Engineer and Technical Lead with 10+ years of hands-on delivery across fintech, healthcare, energy, manufacturing, and SaaS. Deep expertise in Java, Spring Boot, microservices, distributed systems, AWS/Azure, Kafka, and CI/CD. Based in Milwaukee, WI.",
+    bio:       "Senior Java Engineer and Technical Lead with 10+ years of hands-on enterprise delivery across fintech, healthcare, energy, manufacturing, and SaaS. Deep expertise in Java, Spring Boot, microservices, distributed systems, AWS/Azure, Kafka, and CI/CD. Based in Milwaukee, WI.",
   },
 
   /* ── CREDENTIALS ────────────────────────────────────────────────── */
@@ -210,8 +209,8 @@ var DRS_CONFIG = {
   /* ── SEO / META ─────────────────────────────────────────────────── */
   seo: {
     siteTitle:   "Derivative Research Systems | IT Modernization & Security Advisory",
-    description: "Boutique IT advisory firm specializing in IT modernization, technical debt elimination, and security integration and AI for enterprise teams.",
-    keywords:    "IT modernization, technical debt, security integration, microservices, Java, distributed systems, cloud migration, AI",
-    copyrightYear: "2021",
+    description: "Boutique IT advisory firm specializing in IT modernization, technical debt elimination, and security integration for enterprise teams.",
+    keywords:    "IT modernization, technical debt, security integration, microservices, Java, distributed systems, cloud migration, Milwaukee",
+    copyrightYear: "2024",
   },
 };
