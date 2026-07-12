@@ -22,11 +22,11 @@ var DRS_CONFIG = {
   contact: {
     advisoryEmail:  "advisory.account@derivativeresearchsystems.com",
     ceoEmail:       "jeffcrump@derivativeresearchsystems.com",
-    linkedIn:       "https://linkedin.com/in/jeffmcrump/",
+    linkedIn:       "https://www.linkedin.com/company/71403992/",
     locationFull:   "Milwaukee, Wisconsin",
     locationSub:    "On-site & remote engagements",
     responseTime:   "Within 1 business day",
-    formspreeId:    "advisory",  // → https://formspree.io/f/{formspreeId}
+    formspreeId:    "xzdqvbvl",  // → https://formspree.io/f/{formspreeId}
     ctaLabel:       "Engage DRS",
   },
 
