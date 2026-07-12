@@ -20,8 +20,8 @@ var DRS_CONFIG = {
 
   /* ── CONTACT ────────────────────────────────────────────────────── */
   contact: {
-    advisoryEmail:  "advisory@derivativeresearchsystems.com",
-    ceoEmail:       "ceo@derivativeresearchsystems.com",
+    advisoryEmail:  "advisory.account@derivativeresearchsystems.com",
+    ceoEmail:       "jeffcrump@derivativeresearchsystems.com",
     linkedIn:       "https://linkedin.com/in/jeffmcrump/",
     locationFull:   "Milwaukee, Wisconsin",
     locationSub:    "On-site & remote engagements",
