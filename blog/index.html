@@ -1,250 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="icon" type="image/svg+xml" href="../favicon.svg"/>
-  <title>Insights | Derivative Research Systems</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --green:#76b900;--green-dk:#5a8c00;--green-lt:#9fd600;
-      --black:#000;--surface:#0a0a0a;--panel:#111;--border:#222;
-      --mid:#444;--text:#e8e8e8;--muted:#888;--white:#fff;
-      --nav-h:60px;--font:'Inter',system-ui,sans-serif;
-    }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html{scroll-behavior:smooth;}
-    body{background:var(--black);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
-    a{color:inherit;text-decoration:none;}
-    button{cursor:pointer;font-family:inherit;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | Derivative Research Systems</title>
+  <meta name="description" content="Twenty essays on responsible AI adoption for small and mid-market businesses. Honest, jargon-free, and built for engineering leaders who have to make real decisions.">
 
-    /* NAV */
-    .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);background:rgba(0,0,0,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;}
-    .nav-inner{width:100%;max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:0;}
-    .nav-logo{display:flex;align-items:center;gap:10px;margin-right:40px;}
-    .nav-logo-mark{width:28px;height:28px;background:var(--green);clip-path:polygon(0 0,100% 0,100% 60%,60% 100%,0 100%);}
-    .nav-logo-text{font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--white);}
-    .nav-logo-text span{color:var(--green);}
-    .nav-links{display:flex;align-items:center;height:var(--nav-h);list-style:none;gap:0;flex:1;}
-    .nav-links li a{display:flex;align-items:center;padding:0 16px;height:var(--nav-h);font-size:13px;font-weight:500;color:var(--text);transition:color .15s;}
-    .nav-links li a:hover,.nav-links li a.active{color:var(--green);}
-    .nav-actions{margin-left:auto;display:flex;gap:12px;}
-    .btn-nav{padding:7px 18px;font-size:12px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border:1px solid var(--green);color:var(--green);background:transparent;transition:background .15s,color .15s;}
-    .btn-nav:hover,.btn-nav-fill{background:var(--green);color:var(--black);}
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://derivativeresearchsystems.com/blog/">
+  <meta property="og:title" content="The DRS Blog &mdash; Honest AI Adoption for SMBs">
+  <meta property="og:description" content="Twenty essays on responsible AI adoption for small and mid-market businesses.">
 
-    /* HERO */
-    .blog-hero{padding:calc(var(--nav-h) + 80px) 24px 60px;background:var(--surface);border-bottom:1px solid var(--border);}
-    .blog-hero-inner{max-width:1400px;margin:0 auto;}
-    .eyebrow{font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
-    .eyebrow::before{content:'';display:block;width:20px;height:1px;background:var(--green);}
-    .blog-hero h1{font-size:clamp(40px,6vw,72px);font-weight:900;letter-spacing:-0.03em;color:var(--white);line-height:1;margin-bottom:16px;}
-    .blog-hero h1 span{color:var(--green);}
-    .blog-hero p{font-size:17px;color:var(--muted);max-width:520px;}
-
-    /* FILTERS */
-    .filters{max-width:1400px;margin:0 auto;padding:32px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border);}
-    .filter-btn{padding:7px 18px;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:1px solid var(--border);color:var(--muted);background:transparent;transition:all .15s;}
-    .filter-btn:hover,.filter-btn.active{border-color:var(--green);color:var(--green);}
-    .filter-search{margin-left:auto;display:flex;gap:0;}
-    .filter-search input{background:var(--panel);border:1px solid var(--border);color:var(--text);padding:8px 16px;font-size:13px;font-family:var(--font);outline:none;width:220px;transition:border-color .15s;}
-    .filter-search input:focus{border-color:var(--green);}
-
-    /* GRID */
-    .posts-section{max-width:1400px;margin:0 auto;padding:48px 24px 100px;}
-    .posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-    .post-card{background:var(--panel);border:1px solid var(--border);display:flex;flex-direction:column;transition:border-color .2s;}
-    .post-card:hover{border-color:var(--green);}
-    .post-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#0a1200,#0d1f00);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-    .post-thumb-text{font-size:12px;font-weight:700;color:rgba(118,185,0,0.2);letter-spacing:0.1em;text-transform:uppercase;}
-    .post-cat{position:absolute;top:14px;left:14px;background:var(--green);color:var(--black);font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;}
-    .post-body{padding:24px;flex:1;display:flex;flex-direction:column;}
-    .post-meta{font-size:11px;color:var(--green);font-weight:600;letter-spacing:0.08em;margin-bottom:8px;}
-    .post-title{font-size:17px;font-weight:700;color:var(--white);line-height:1.3;margin-bottom:10px;}
-    .post-excerpt{font-size:13px;color:var(--muted);line-height:1.7;flex:1;}
-    .post-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-    .post-read{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
-    .post-arrow{color:var(--green);font-size:16px;}
-    .no-posts{grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--muted);}
-    .no-posts h3{font-size:20px;color:var(--text);margin-bottom:12px;}
-
-    /* PAGINATION */
-    .pagination{display:flex;justify-content:center;gap:8px;margin-top:48px;}
-    .page-btn{padding:8px 16px;border:1px solid var(--border);color:var(--muted);background:transparent;font-size:13px;font-family:var(--font);transition:all .15s;}
-    .page-btn:hover,.page-btn.active{border-color:var(--green);color:var(--green);}
-
-    /* FOOTER */
-    footer{background:#050505;border-top:1px solid var(--border);padding:32px 24px;text-align:center;}
-    footer p{font-size:12px;color:var(--mid);}
-    footer a{color:var(--green);}
-
-    @media(max-width:900px){.posts-grid{grid-template-columns:1fr 1fr;}}
-    @media(max-width:600px){.posts-grid{grid-template-columns:1fr;}.nav-links{display:none;}}
-  </style>
+  <link rel="canonical" href="https://derivativeresearchsystems.com/blog/">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="blog.css">
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nav-inner">
-    <a class="nav-logo" href="../index.html">
-      <div class="nav-logo-mark"></div>
-      <div class="nav-logo-text"><span>DRS</span> Derivative Research Systems</div>
-    </a>
-    <ul class="nav-links">
-      <li><a href="../index.html#services">Services</a></li>
-      <li><a href="../index.html#industries">Industries</a></li>
-      <li><a href="../index.html#about">About</a></li>
-      <li><a href="../index.html#case-studies">Case Studies</a></li>
-      <li><a href="index.html" class="active">Insights</a></li>
-      <li><a href="../index.html#contact">Contact</a></li>
-    </ul>
-    <div class="nav-actions">
-      <a href="../admin/index.html" class="btn-nav">Blog Admin</a>
-      <a href="../index.html#contact" class="btn-nav btn-nav-fill">Engage DRS</a>
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="brand">
+        <span class="brand-mark"></span>
+        <span class="brand-text">DRS</span>
+      </a>
+      <nav class="site-nav">
+        <a href="/">Home</a>
+        <a href="/blog/" class="active">Blog</a>
+        <a href="/diagnostic/">Diagnostic</a>
+      </nav>
     </div>
-  </div>
-</nav>
+  </header>
 
-<div class="blog-hero">
-  <div class="blog-hero-inner">
-    <div class="eyebrow">DRS Insights</div>
-    <h1>Architecture thinking<br/><span>from the field.</span></h1>
-    <p>Practical perspectives on IT modernization, distributed systems, and security integration.</p>
-  </div>
-</div>
+  <main class="blog-index">
 
-<div class="filters">
-  <button class="filter-btn active" data-cat="all">All</button>
-  <button class="filter-btn" data-cat="Architecture">Architecture</button>
-  <button class="filter-btn" data-cat="Security">Security</button>
-  <button class="filter-btn" data-cat="Modernization">Modernization</button>
-  <button class="filter-btn" data-cat="Cloud">Cloud</button>
-  <button class="filter-btn" data-cat="Engineering">Engineering</button>
-  <div class="filter-search">
-    <input type="text" id="searchInput" placeholder="Search posts…"/>
-  </div>
-</div>
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">The DRS Blog</p>
+        <h1>Honest AI adoption for small and mid-market businesses.</h1>
+        <p class="dek">
+          Twenty essays on responsible AI adoption for engineering leaders and
+          executives who have to make real decisions with real budgets. No
+          jargon, no vendor talking points, no lecture &mdash; just the practical
+          discipline that separates AI programs that produce compounding value
+          from ones that produce a portfolio of half-finished experiments.
+        </p>
+      </div>
+    </section>
 
-<div class="posts-section">
-  <div class="posts-grid" id="postsGrid">
-    <div class="no-posts">
-      <h3>No posts yet.</h3>
-      <p>Use the <a href="../admin/index.html">Blog Admin</a> to write and publish your first post.</p>
+    <section class="post-list">
+      <div class="container">
+                <a href="ai-adoption-isnt-a-technology-decision-its-a-discipline-decision.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 1</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Adoption</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-07-24">July 24, 2026</time>
+          </p>
+          <h2 class="post-card-title">AI Adoption Isn&#39;t a Technology Decision. It&#39;s a Discipline Decision.</h2>
+          <p class="post-card-excerpt">Most small businesses spending money on AI right now are getting nothing for it. Somewhere between $10,000 and $100,000 into pilots, tools, and consultants that produced no measurable outcome anyone can point to.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="the-inventory-nobody-wants-to-make.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 2</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Adoption</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-07-31">July 31, 2026</time>
+          </p>
+          <h2 class="post-card-title">The Inventory Nobody Wants to Make</h2>
+          <p class="post-card-excerpt">Before you spend a dollar on AI, spend two weeks on an inventory.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="why-killing-projects-is-the-hardest-ai-skill-to-build.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 3</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Adoption</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-08-07">August 7, 2026</time>
+          </p>
+          <h2 class="post-card-title">Why Killing Projects Is the Hardest AI Skill to Build</h2>
+          <p class="post-card-excerpt">Ask any SMB executive when they last killed a project — really killed it, publicly, with the reasoning documented — and watch how long it takes them to answer.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="the-missing-voice-in-your-ai-program.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 4</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Adoption</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-08-14">August 14, 2026</time>
+          </p>
+          <h2 class="post-card-title">The Missing Voice in Your AI Program</h2>
+          <p class="post-card-excerpt">Most AI programs that fail loudest were driven top-down by an executive who read something on LinkedIn and imposed a solution before the technical team could evaluate it.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="your-data-is-not-ready-heres-how-to-tell.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 5</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Adoption</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-08-21">August 21, 2026</time>
+          </p>
+          <h2 class="post-card-title">Your Data Is Not Ready. Here&#39;s How to Tell.</h2>
+          <p class="post-card-excerpt">AI systems inherit whatever data quality your business has. That&#39;s the sentence I open more client engagements with than any other, because most SMBs I meet believe their data is in better shape than it is.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="you-cant-measure-what-you-didnt-baseline.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 6</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Adoption</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-08-28">August 28, 2026</time>
+          </p>
+          <h2 class="post-card-title">You Can&#39;t Measure What You Didn&#39;t Baseline</h2>
+          <p class="post-card-excerpt">The single biggest cause of &quot;we can&#39;t tell if AI worked&quot; is that no one measured what things cost before AI arrived.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="whos-responsible-when-your-ai-is-wrong.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 7</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Adoption</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-09-04">September 4, 2026</time>
+          </p>
+          <h2 class="post-card-title">Who&#39;s Responsible When Your AI Is Wrong?</h2>
+          <p class="post-card-excerpt">At some point, an AI system in your business will produce a wrong answer that causes a customer or financial impact. The question is whether you&#39;ve decided who&#39;s accountable before that happens, or whether you&#39;ll be figuring it out in a…</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="trust-but-verify-reviewing-what-ai-produces.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 8</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Adoption</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-09-11">September 11, 2026</time>
+          </p>
+          <h2 class="post-card-title">Trust But Verify — Reviewing What AI Produces</h2>
+          <p class="post-card-excerpt">AI can generate a plausible-looking wrong answer faster than a human can produce a correct one. That single fact changes what &quot;review&quot; has to mean in your business.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="why-your-competitors-are-not-your-ai-roadmap.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 9</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Adoption</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-09-18">September 18, 2026</time>
+          </p>
+          <h2 class="post-card-title">Why Your Competitors Are Not Your AI Roadmap</h2>
+          <p class="post-card-excerpt">The origin of an AI initiative predicts its outcome more reliably than the technology chosen.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="the-last-initiative-you-ran-predicts-your-next-one.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 10</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Adoption</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-09-25">September 25, 2026</time>
+          </p>
+          <h2 class="post-card-title">The Last Initiative You Ran Predicts Your Next One</h2>
+          <p class="post-card-excerpt">Here&#39;s a diagnostic question I ask early in AI adoption conversations: think about the last significant technology initiative your business ran — not AI, anything. Can you tell me what the measured outcome was?</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="the-ai-policy-you-probably-dont-have.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 11</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Adoption</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-10-02">October 2, 2026</time>
+          </p>
+          <h2 class="post-card-title">The AI Policy You Probably Don&#39;t Have</h2>
+          <p class="post-card-excerpt">Your employees are using AI right now, whether you&#39;ve sanctioned it or not.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="how-to-interview-an-ai-vendor.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 12</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">Vendor Selection</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-10-09">October 9, 2026</time>
+          </p>
+          <h2 class="post-card-title">How to Interview an AI Vendor</h2>
+          <p class="post-card-excerpt">Vendors have polished demos. You need to ask the questions the demo doesn&#39;t answer.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="three-signs-an-ai-pilot-is-about-to-fail.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 13</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">Pilot Programs</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-10-16">October 16, 2026</time>
+          </p>
+          <h2 class="post-card-title">Three Signs an AI Pilot Is About to Fail</h2>
+          <p class="post-card-excerpt">Failed AI pilots share the same warning signs months before the funeral. Here are three worth watching for in your own business.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="the-return-on-manual-work.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 14</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI ROI</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-10-23">October 23, 2026</time>
+          </p>
+          <h2 class="post-card-title">The Return on Manual Work</h2>
+          <p class="post-card-excerpt">The best framework for evaluating AI investments isn&#39;t ROI on AI. It&#39;s Return on Manual Work.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="sequencing-which-ai-project-comes-first.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 15</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Strategy</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-10-30">October 30, 2026</time>
+          </p>
+          <h2 class="post-card-title">Sequencing — Which AI Project Comes First</h2>
+          <p class="post-card-excerpt">Twelve AI initiatives with three-person teams is how AI programs stall. The math is unforgiving.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="what-small-businesses-get-right-that-enterprises-miss.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 16</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">SMB Advantage</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-11-06">November 6, 2026</time>
+          </p>
+          <h2 class="post-card-title">What Small Businesses Get Right That Enterprises Miss</h2>
+          <p class="post-card-excerpt">Talk to any enterprise CIO wrestling with AI adoption and you&#39;ll hear the same set of frustrations: fifteen initiatives, three internal factions, six-month procurement cycles, and a governance committee that meets monthly. Meanwhile, some…</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="what-happens-after-the-first-ai-win.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 17</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Program Scaling</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-11-13">November 13, 2026</time>
+          </p>
+          <h2 class="post-card-title">What Happens After the First AI Win</h2>
+          <p class="post-card-excerpt">The first AI win is easier than the second. Every business I&#39;ve watched succeed with AI adoption has the same experience: a small, contained deployment that works well, followed by a difficult second act.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="the-cost-of-not-deciding.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 18</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Adoption</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-11-20">November 20, 2026</time>
+          </p>
+          <h2 class="post-card-title">The Cost of Not Deciding</h2>
+          <p class="post-card-excerpt">The most expensive AI decision most SMBs make is not making one.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="when-your-executive-wants-ai-but-doesnt-know-why.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 19</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">Executive Conversations</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-11-27">November 27, 2026</time>
+          </p>
+          <h2 class="post-card-title">When Your Executive Wants AI But Doesn&#39;t Know Why</h2>
+          <p class="post-card-excerpt">The most common conversation I have with mid-market technology leaders starts with some version of &quot;the board is asking about AI, and I don&#39;t know what to tell them.&quot;</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+        <a href="the-compound-return-of-discipline.html" class="post-card">
+          <p class="post-card-eyebrow">
+            <span class="post-card-num">Post 20</span>
+            <span class="post-card-dot">&middot;</span>
+            <span class="post-card-category">AI Adoption</span>
+            <span class="post-card-dot">&middot;</span>
+            <time datetime="2026-12-04">December 4, 2026</time>
+          </p>
+          <h2 class="post-card-title">The Compound Return of Discipline</h2>
+          <p class="post-card-excerpt">One year of discipline beats three years of enthusiasm. That&#39;s the closing observation for this series, and it&#39;s the one I most want SMB leaders to internalize.</p>
+          <p class="post-card-read">Read the post &rarr;</p>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="index-cta">
+      <div class="container">
+        <div class="cta-card">
+          <p class="cta-eyebrow">Start here</p>
+          <h3>The AI Readiness Diagnostic</h3>
+          <p>
+            Every essay on this blog references the same downloadable tool.
+            Ten questions to honestly assess where your organization stands,
+            with scoring bands and specific 90-day action plans. Free, no
+            strings.
+          </p>
+          <a href="/diagnostic/" class="cta-button">Get the Diagnostic &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Derivative Research Systems &middot; <a href="mailto:jeff.m.crump@gmail.com">jeff.m.crump@gmail.com</a></p>
+      <p class="license">
+        All posts licensed CC BY 4.0 &mdash; use, adapt, share.
+        Attribution to DRS is appreciated, not required.
+      </p>
     </div>
-  </div>
-  <div class="pagination" id="pagination"></div>
-</div>
+  </footer>
 
-<footer>
-  <p>© 2024–2026 Derivative Research Systems LLC &nbsp;·&nbsp; <a href="../index.html">Home</a> &nbsp;·&nbsp; <a href="../index.html#contact">Contact</a></p>
-</footer>
-
-<script>
-// Attempt to load registry; track whether the file loaded at all
-window._registryLoaded = false;
-window._registryError  = false;
-</script>
-<script src="blog-registry.js"
-  onload="window._registryLoaded=true;"
-  onerror="window._registryError=true;"></script>
-<script>
-const POSTS_PER_PAGE = 9;
-let allPosts = (typeof DRS_BLOG_POSTS !== 'undefined') ? [...DRS_BLOG_POSTS] : [];
-let filtered = [...allPosts];
-let currentPage = 1;
-let currentCat = 'all';
-let searchTerm = '';
-
-// Detect stale/empty registry vs genuine no-posts
-const registryMissing = window._registryError || typeof DRS_BLOG_POSTS === 'undefined';
-const registryEmpty   = !registryMissing && DRS_BLOG_POSTS.length === 0;
-
-function noPostsHTML(isFilter) {
-  if (isFilter) {
-    return `<div class="no-posts"><h3>No posts match.</h3><p>Try clearing the filter or search term.</p></div>`;
-  }
-  if (registryMissing) {
-    return `<div class="no-posts">
-      <h3>Registry not found</h3>
-      <p style="margin-bottom:16px;"><code>blog/blog-registry.js</code> is missing or empty.</p>
-      <p><strong>To fix:</strong> open the <a href="../admin/index.html">Blog Admin</a>, click <strong>Export Files</strong>, download <code>blog-registry.js</code>, and place it in the <code>blog/</code> folder.</p>
-    </div>`;
-  }
-  if (registryEmpty) {
-    return `<div class="no-posts">
-      <h3>No posts published yet.</h3>
-      <p>Write your first post in the <a href="../admin/index.html">Blog Admin</a>, then click <strong>Export Files</strong> and drop <code>blog-registry.js</code> into the <code>blog/</code> folder.</p>
-    </div>`;
-  }
-  return `<div class="no-posts"><h3>No posts found.</h3><p>Try a different filter or <a href="../admin/index.html">write one</a>.</p></div>`;
-}
-
-function cardHTML(p) {
-  return `
-    <div class="post-card" data-cat="${p.category||''}">
-      <div class="post-thumb">
-        <div class="post-thumb-text">${p.category||'Insight'}</div>
-        <span class="post-cat">${p.category||'Advisory'}</span>
-      </div>
-      <div class="post-body">
-        <div class="post-meta">${p.date}</div>
-        <div class="post-title">${p.title}</div>
-        <p class="post-excerpt">${p.excerpt}</p>
-      </div>
-      <div class="post-footer">
-        <span class="post-read">${p.readTime||'5 min read'}</span>
-        <a href="${p.slug}.html" class="post-arrow">→</a>
-      </div>
-    </div>`;
-}
-
-function render() {
-  const grid = document.getElementById('postsGrid');
-  const pager = document.getElementById('pagination');
-  const isFiltering = currentCat !== 'all' || searchTerm.length > 0;
-  let posts = allPosts.filter(p => {
-    const matchCat = currentCat === 'all' || (p.category||'') === currentCat;
-    const matchSearch = !searchTerm || p.title.toLowerCase().includes(searchTerm) || (p.excerpt||'').toLowerCase().includes(searchTerm);
-    return matchCat && matchSearch;
-  });
-  filtered = posts;
-  const total = Math.ceil(posts.length / POSTS_PER_PAGE);
-  if (currentPage > total) currentPage = 1;
-  const slice = posts.slice((currentPage-1)*POSTS_PER_PAGE, currentPage*POSTS_PER_PAGE);
-  if (posts.length === 0) {
-    grid.innerHTML = noPostsHTML(isFiltering);
-    pager.innerHTML = '';
-    return;
-  }
-  grid.innerHTML = slice.map(cardHTML).join('');
-  if (total <= 1) { pager.innerHTML = ''; return; }
-  let pages = '';
-  for (let i = 1; i <= total; i++) {
-    pages += `<button class="page-btn${i===currentPage?' active':''}" onclick="goPage(${i})">${i}</button>`;
-  }
-  pager.innerHTML = pages;
-}
-
-function goPage(n) { currentPage = n; render(); window.scrollTo(0,0); }
-
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentCat = btn.dataset.cat;
-    currentPage = 1;
-    render();
-  });
-});
-
-document.getElementById('searchInput').addEventListener('input', e => {
-  searchTerm = e.target.value.toLowerCase();
-  currentPage = 1;
-  render();
-});
-
-render();
-</script>
 </body>
 </html>
