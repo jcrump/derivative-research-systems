@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>You Can&#39;t Measure What You Didn&#39;t Baseline | DRS Insights</title>
-  <meta name="description" content="The single biggest cause of &quot;we can&#39;t tell if AI worked&quot; is that no one measured what things cost before AI arrived."/>
-  <meta property="og:type"        content="article"/>
-  <meta property="og:site_name"   content="Derivative Research Systems"/>
-  <meta property="og:title"       content="You Can&#39;t Measure What You Didn&#39;t Baseline"/>
-  <meta property="og:description" content="The single biggest cause of &quot;we can&#39;t tell if AI worked&quot; is that no one measured what things cost before AI arrived."/>
-  <meta property="og:url"         content="https://derivativeresearchsystems.com/blog/you-cant-measure-what-you-didnt-baseline"/>
-  <meta property="article:author"         content="Jeff Crump"/>
-  <meta property="article:published_time" content="2026-08-28"/>
-  <meta property="article:section"        content="AI Adoption"/>
-  <meta name="twitter:card"        content="summary_large_image"/>
-  <meta name="twitter:title"       content="You Can&#39;t Measure What You Didn&#39;t Baseline"/>
-  <meta name="twitter:description" content="The single biggest cause of &quot;we can&#39;t tell if AI worked&quot; is that no one measured what things cost before AI arrived."/>
-  <link rel="canonical" href="https://derivativeresearchsystems.com/blog/you-cant-measure-what-you-didnt-baseline"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Return on Manual Work | Derivative Research Systems</title>
+  <meta name="description" content="The best framework for evaluating AI investments isn&#39;t ROI on AI. It&#39;s Return on Manual Work.">
+  <meta name="author" content="Jeff Crump">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://derivativeresearchsystems.com/blog/the-return-on-manual-work.html">
+  <meta property="og:title" content="The Return on Manual Work">
+  <meta property="og:description" content="The best framework for evaluating AI investments isn&#39;t ROI on AI. It&#39;s Return on Manual Work.">
+  <meta property="article:published_time" content="2026-10-23">
+  <meta property="article:author" content="Jeff Crump">
+  <meta property="article:section" content="AI ROI">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Return on Manual Work">
+  <meta name="twitter:description" content="The best framework for evaluating AI investments isn&#39;t ROI on AI. It&#39;s Return on Manual Work.">
+
+  <link rel="canonical" href="https://derivativeresearchsystems.com/blog/the-return-on-manual-work.html">
+
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet"/>
   <style>
@@ -91,57 +97,52 @@
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nav-inner">
-    <a class="nav-logo" href="../index.html">
-      <div class="nav-logo-mark"></div>
-      <div class="nav-logo-text"><span>DRS</span> Derivative Research Systems</div>
-    </a>
-    <a href="index.html" class="nav-back">← All Insights</a>
-  </div>
-</nav>
-
-<header class="post-header">
-  <div class="post-header-inner">
-    <div class="post-breadcrumb">
-      <a href="../index.html">Home</a><span>/</span>
-      <a href="index.html">Insights</a><span>/</span>
-      <span>AI Adoption</span>
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="brand">
+        <span class="brand-mark"></span>
+        <span class="brand-text">DRS</span>
+      </a>
+      <nav class="site-nav">
+        <a href="/">Home</a>
+        <a href="/blog/" class="active">Blog</a>
+        <a href="/diagnostic/">Diagnostic</a>
+      </nav>
     </div>
-    <div class="post-cat-badge">AI Adoption</div>
-    <h1 class="post-title">You Can&#39;t Measure What You Didn&#39;t Baseline</h1>
-    <p class="post-excerpt-lede">The single biggest cause of &quot;we can&#39;t tell if AI worked&quot; is that no one measured what things cost before AI arrived.</p>
-    <div class="post-meta-bar">
-      <div class="post-author">
-        <div class="post-author-avatar">JC</div>
-        <div>
-          <div class="post-author-name">Jeff Crump</div>
-          <div class="post-author-role">Founder &amp; Principal Architect, DRS</div>
+  </header>
+
+  <main class="blog-post">
+
+    <article>
+
+      <header class="post-header">
+        <div class="container">
+          <p class="eyebrow">AI ROI</p>
+          <h1>The Return on Manual Work</h1>
+          <p class="post-meta">
+            <span class="post-author">Jeff Crump</span>
+            <span class="post-dot">&middot;</span>
+            <time datetime="2026-10-23">October 23, 2026</time>
+          </p>
         </div>
-      </div>
-      <div class="post-meta-item"><strong>August 28, 2026</strong></div>
-      <div class="post-meta-item">3 min read</div>
-    </div>
-  </div>
-</header>
+      </header>
 
-<div class="post-layout">
-  <article class="post-content" id="postContent">
-<p>The single biggest cause of &ldquo;we can&rsquo;t tell if AI worked&rdquo; is that no one measured what things cost before AI arrived.</p>
-<p>You want to prove a vendor&rsquo;s tool cut your customer service response time by 40%? You need to know what your response time was. You want to show AI-assisted development shipped features faster? You need cycle time from six months before adoption. You want to demonstrate that automated report generation saved 200 hours per quarter? You need to know how many hours the manual version took.</p>
-<p>Most SMBs skip this step. They adopt AI in the excitement of the moment, and six months later they&rsquo;re trying to reconstruct what &ldquo;normal&rdquo; looked like from memory, which is not a defensible answer to a CFO. The result is that AI ROI conversations become anecdote-versus-anecdote — the enthusiasts remember the wins, the skeptics remember the misses, and no one has data.</p>
-<p>The fix is unglamorous: measure for six to eight weeks before touching anything. Cycle time, defect rate, hours per process, customer satisfaction, whatever the AI initiative is supposed to move. Even rough measurement beats no measurement — the goal is a baseline your team agrees on, not a statistically pristine study.</p>
-<p>Here&rsquo;s the discipline that separates AI programs that produce defensible business cases from ones that produce PowerPoint theater:</p>
-<p>Write the baseline down before you deploy. Send it to the finance team. Attach a specific number to the &ldquo;success&rdquo; criteria. Six months later, when you measure again, you have an actual comparison instead of a narrative.</p>
-<p>I worked with an operations team that skipped this once and never again. They adopted an AI-powered scheduling tool that felt like it was helping. But when the CEO asked for the ROI at review time, they couldn&rsquo;t produce it — nobody had recorded scheduling error rates from before. They kept the tool, but the executive team&rsquo;s confidence in the next AI initiative dropped substantially, because it looked like they&rsquo;d bought something without a business case.</p>
-<p>The lesson: don&rsquo;t let vendor case studies do your measurement for you. A &ldquo;30% productivity improvement&rdquo; that some other company reported is not evidence about your business. Your baseline is the only thing that translates a change into a decision.</p>
-<p>If your engineering team, operations team, or customer-facing team can&rsquo;t tell you the baseline numbers for their most important processes, that&rsquo;s the pre-work. Baseline first. Adopt second. Measure honestly. Repeat.</p>
-<p>Question 5 of the <a href="https://derivativeresearchsystems.com/diagnostic">diagnostic</a> tests exactly this.</p>
+      <div class="post-body">
+        <div class="container container-narrow">
+          <p>The best framework for evaluating AI investments isn&rsquo;t ROI on AI. It&rsquo;s Return on Manual Work.</p>
+<p>Here&rsquo;s why the reframe matters. ROI on AI puts the vendor&rsquo;s technology at the center of the calculation. You&rsquo;re comparing what AI produces against what it costs, which is how the vendor wants you to think — because their pricing is what they control, and the &ldquo;productivity improvements&rdquo; are marketing.</p>
+<p>Return on Manual Work puts your business at the center. You calculate the fully-loaded cost of the manual work AI would replace. That&rsquo;s your ceiling. If AI can be deployed for materially less than that ceiling and produce equivalent-or-better output, it wins. If not, it doesn&rsquo;t, no matter how impressive the demo was.</p>
+<p>The calculation is straightforward. Pick a process. Multiply the hours it consumes per week by the fully-loaded cost of the person doing it. Multiply by 52. That&rsquo;s the annual cost of the manual work.</p>
+<p>Example: An operations analyst spends four hours per week on a recurring reconciliation. At a fully-loaded cost of $50 per hour (that&rsquo;s salary plus benefits, roughly, for a mid-market analyst), that reconciliation costs $10,400 per year. Any AI solution that costs less than $10,400 per year AND produces equivalent output is winning against the manual baseline.</p>
+<p>Now the honest complications. The AI solution has to actually produce equivalent output, which requires you to have a way to check. Some processes have hidden requirements that AI can&rsquo;t fully meet — the analyst was also spotting anomalies during the reconciliation that a naive AI wouldn&rsquo;t catch. Some processes are low enough judgment that AI clears the bar easily; some aren&rsquo;t. The Return on Manual Work framework doesn&rsquo;t skip these complications; it makes them explicit by requiring you to compare against the baseline honestly.</p>
+<p>The framework produces three useful outputs. First, a prioritization: your highest-cost manual work is where AI investment should start. Second, a decision rule: if AI costs more than the manual work, don&rsquo;t do it, no matter how novel the technology. Third, a measurement standard: if AI is deployed and the manual work isn&rsquo;t actually reduced, the AI didn&rsquo;t succeed, whatever the vendor is claiming.</p>
+<p>I&rsquo;ve watched businesses skip this framework and end up with an AI tool bill that exceeds the cost of the labor it was supposed to save. That&rsquo;s not an AI failure; that&rsquo;s a math failure. The math is the framework&rsquo;s whole purpose.</p>
+<p>If your business hasn&rsquo;t calculated its top ten manual-work costs, that&rsquo;s the first exercise. Everything downstream — vendor selection, pilot prioritization, ROI review — depends on having those numbers.</p>
         </div>
       </div>
 
       <aside class="post-cta">
-        
+        <div class="container container-narrow">
           <div class="cta-card">
             <p class="cta-eyebrow">Free download</p>
             <h3>Start with the AI Readiness Diagnostic</h3>
@@ -156,61 +157,24 @@
       </aside>
 
       <nav class="post-nav">
-        
+        <div class="container container-narrow">
           <a href="/blog/" class="post-nav-link">&larr; All posts</a>
         </div>
       </nav>
-  </article>
-  <aside class="post-sidebar">
-    <div class="sidebar-card">
-      <div class="sidebar-title">In This Post</div>
-      <ul class="toc-list" id="tocList"></ul>
+
+    </article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Derivative Research Systems &middot; <a href="mailto:jeff.m.crump@gmail.com">jeff.m.crump@gmail.com</a></p>
+      <p class="license">
+        This post is licensed CC BY 4.0 &mdash; use it, adapt it, share it.
+        Attribution to DRS is appreciated, not required.
+      </p>
     </div>
-    
-    <div class="cta-card">
-      <div class="sidebar-title">Work With DRS</div>
-      <p>Ready to solve the problem you're reading about?</p>
-      <a href="../index.html#contact" class="btn-cta">Schedule Assessment</a>
-    </div>
-  </aside>
-</div>
-
-<nav class="post-nav"></nav>
-
-<footer>
-  <p>&copy; 2024&ndash;2026 Derivative Research Systems LLC &nbsp;&middot;&nbsp;
-     <a href="../index.html">Home</a> &nbsp;&middot;&nbsp;
-     <a href="index.html">Insights</a> &nbsp;&middot;&nbsp;
-     <a href="../index.html#contact">Contact</a>
-  </p>
-</footer>
-
-<script>
-const content = document.getElementById('postContent');
-const toc     = document.getElementById('tocList');
-if (content && toc) {
-  const headings = content.querySelectorAll('h2,h3');
-  headings.forEach((h, i) => {
-    const id = 'h' + i;
-    h.id = id;
-    const li = document.createElement('li');
-    li.innerHTML = '<a href="#' + id + '">' + h.textContent + '</a>';
-    toc.appendChild(li);
-  });
-  // Active TOC highlight on scroll
-  const links = toc.querySelectorAll('a');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        links.forEach(l => l.classList.remove('active'));
-        const active = toc.querySelector('a[href="#' + e.target.id + '"]');
-        if (active) active.classList.add('active');
-      }
-    });
-  }, { rootMargin: '-20% 0px -70% 0px' });
-  headings.forEach(h => obs.observe(h));
-}
-</script>
+  </footer>
 
 </body>
 </html>
