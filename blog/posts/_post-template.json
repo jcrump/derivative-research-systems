@@ -1,0 +1,9 @@
+{
+  "slug": "_post-template",
+  "title": "{{POST_TITLE}}",
+  "excerpt": "{{POST_EXCERPT}}",
+  "category": "Architecture",
+  "date": "2026-09-21",
+  "readTime": "2 min read",
+  "tags": []
+}
