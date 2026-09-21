@@ -102,15 +102,6 @@ var DRS_BLOG_POSTS = [
     tags: []
   },
   {
-    slug: "_post-template",
-    title: "{{POST_TITLE}}",
-    excerpt: "{{POST_EXCERPT}}",
-    category: "Architecture",
-    date: "2026-09-21",
-    readTime: "2 min read",
-    tags: []
-  },
-  {
     slug: "ai-automation-opportunities-every-smb-should-evaluate",
     title: "AI Automation Opportunities Every SMB Should Evaluate",
     excerpt: "Where to start, what to skip, and how to measure whether AI automation is actually working for your SMB.",
